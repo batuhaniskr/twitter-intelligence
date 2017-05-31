@@ -26,7 +26,7 @@ python3 tracking.py --username "HaberSau"
 
 Get tweets by query
 
-python3 tracking.py --query "sakarya"
+<pre> python3 tracking.py --query "sakarya" </pre>
 
 Get twit at a specific date range
 
