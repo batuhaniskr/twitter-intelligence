@@ -54,16 +54,7 @@ def analysis_graph():
         pl.show()
 
 
-        #Hashtag Analysis
-
-        c.execute("SELECT  hashtag as tekrar FROM Tweet ")
-        data = c.fetchall()
-        countData = Counter(data)
-        print(countData)
-
-
-
-
+  
 
 
 analysis_graph()
