@@ -3,6 +3,7 @@ from collections import Counter
 import sqlite3, os
 import os.path
 import pandas as pd
+import matplotlib.pyplot as plt
 #import pylab as pl
 from geopy.geocoders import Nominatim
 import json
@@ -28,33 +29,6 @@ def analysis_graph():
 
 
 
-        # mapping
-        geo_data = {
-
-            "features": []
-        }
-
-        for x in range(len(loc_array)):
-
-          #  print("adres",loc_array[x])
-            if (loc_array[x] != ''):
-
-                geolocator = Nominatim()
-                location = geolocator.geocode(loc_array[x])
-                locxy.append(location.latitude)
-                locxy.append(location.longitude)
-
-                geo_json_feature = {
-                    "lat": location.latitude,
-                    "lng": location.longitude
-
-                }
-
-                geo_data['features'].append(geo_json_feature)
-                locxy.clear()
-
-    with open('geo_data.json', 'w') as fout:
-        fout.write(json.dumps(geo_data, indent=4))
         c.execute("Select text from tweet")
         tweet_data = c.fetchall()
         # print(tweet_data)
@@ -74,10 +48,21 @@ def analysis_graph():
         pl.bar(x, y, align='center',alpha=1.5)
         pl.xticks(x, ilk)
         #pl.plot(x, y, "-")
-        pl.title('En fazla twit atan kullanıcılar')
-        pl.xlabel('Kullanıcı Adı')
-        pl.ylabel('Twit Sayısı')
+        pl.title('User - Tweet Count')
+        pl.xlabel('Username')
+        pl.ylabel('Tweet Count')
         pl.show()
+
+
+        #Hashtag Analysis
+
+        c.execute("SELECT  hashtag as tekrar FROM Tweet ")
+        data = c.fetchall()
+        countData = Counter(data)
+        print(countData)
+
+
+
 
 
 

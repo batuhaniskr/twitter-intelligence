@@ -5,7 +5,10 @@ import sqlite3
 from collections import Counter
 from geopy.geocoders import Nominatim
 import numpy as np
+import matplotlib.pyplot as plt
 from termcolor import colored
+import pandas as pd
+
 conn = sqlite3.connect('TweetAnalysis.db')
 conn.row_factory = lambda cursor, row: row[1]
 c = conn.cursor()
@@ -144,33 +147,11 @@ def main(argv):
         print('Başarıyla "TweetAnalysis.db" veritabanına kayıt edildi.')
         conn.close()
         # Counter
-        '''
-        Hashtag Analysis
 
 
-        d = Counter(hash_list)
 
-        key = d.keys()
-        #print(d)
 
-        df = pd.DataFrame(d, index=key)
-        df.drop(df.columns[1:], inplace=True)
-        df.plot(kind='bar')
 
-        plt.show()
-        '''
-
-        '''
-        labels, values = zip(*Counter(hash_list).items())
-
-        indexes = np.arange(len(labels))
-        width = 1
-
-        plt.bar(indexes, values, width)
-        plt.xticks(indexes + width * 0.5, labels)
-        plt.show()
-        '''
-        #print("hashtag:", Counter(hash_list))
 
 
 def print_color_text():
