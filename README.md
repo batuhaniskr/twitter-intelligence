@@ -22,7 +22,7 @@ python3 tracking.py -h
 
 Get tweets by username 
 
-python3 tracking.py --username "HaberSau"
+<pre> python3 tracking.py --username "HaberSau" </pre>
 
 Get tweets by query
 
@@ -30,5 +30,5 @@ Get tweets by query
 
 Get twit at a specific date range
 
-python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10
+<pre> python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10 </pre>
 
