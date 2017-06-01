@@ -20,19 +20,19 @@ The database is created automically.
 
 # Command-line usage
 
-Get help
+<li>Get help</li>
 
 <pre> python3 tracking.py -h </pre>
 
-Get tweets by username 
+<li>Get tweets by username </li>
 
 <pre> python3 tracking.py --username "HaberSau" </pre>
 
-Get tweets by query
+<li>Get tweets by query</li>
 
 <pre> python3 tracking.py --query "sakarya" </pre>
 
-Get twit at a specific date range
+<li>Get twit at a specific date range</li>
 
 <pre> python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10 </pre>
 
