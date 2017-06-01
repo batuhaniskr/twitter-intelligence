@@ -10,6 +10,8 @@ PyQuery is required for HTML parsing
 
 Matplotlib is required for analysis
 
+PyQt is required for GUI application
+
 # Database
 
 SQLite is used as the database.
@@ -36,3 +38,6 @@ The database is created automically.
 
 <pre> python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10 </pre>
 
+# Graphical User Interface
+
+<li> socialgui.py used for gui application</li>
