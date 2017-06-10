@@ -45,6 +45,6 @@ A project written in Python to get old tweets and tweet analysis
 
 <pre> python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10 </pre>
 
-# Graphical User Interface
+## Graphical User Interface
 
  socialgui.py used for gui application
