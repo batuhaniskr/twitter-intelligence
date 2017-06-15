@@ -3,23 +3,23 @@
 A project written in Python to get old tweets and tweet analysis
 
 ## Prerequisites
+  <ul>
+  <li>Project written for Python 3.x.</li>
 
-  Project written for Python 3.x.
+  <li>PyQuery is required for HTML parsing.</li>
 
-  PyQuery is required for HTML parsing.
+  <li>Matplotlib is required for analysis.</li>
 
-  Matplotlib is required for analysis.
-
-  PyQt is required for GUI application.
-
+  <li>PyQt is required for GUI application.</li>
+</ul>
 ## Database
+<ul>
+  <li>SQLite is used as the database.</li>
 
-  SQLite is used as the database.
+  <li>Tweet data are stored on the Tweet, User, Location, Hashtag, HashtagTweet tables.</li>
 
-  Tweet data are stored on the Tweet, User, Location, Hashtag, HashtagTweet tables.
-
-  The database is created automically.
-
+  <li>The database is created automically.</li>
+</ul>
 ## Command-line usage
 
 <li>Get help</li>
