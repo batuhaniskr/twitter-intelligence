@@ -10,9 +10,11 @@ A project written in Python to get old tweets and tweet analysis
 
   <li>Matplotlib is required for analysis.</li>
 
-  <li>PyQt is required for GUI application.</li>
+  <li>PyQt is required for GUI application.</li>  
 </ul>
+
 ## Database
+
 <ul>
   <li>SQLite is used as the database.</li>
 
@@ -20,6 +22,7 @@ A project written in Python to get old tweets and tweet analysis
 
   <li>The database is created automically.</li>
 </ul>
+
 ## Command-line usage
 
 <li>Get help</li>
