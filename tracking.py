@@ -14,14 +14,11 @@ conn.row_factory = lambda cursor, row: row[1]
 c = conn.cursor()
 hash_list = []
 
-
-
 c.execute("CREATE TABLE IF NOT EXISTS Location (locationid, place)")
 c.execute("CREATE TABLE IF NOT EXISTS User (userid, username, locationid)")
 c.execute("CREATE TABLE IF NOT EXISTS Hashtag (hashtagid, content)")
 c.execute("CREATE TABLE IF NOT EXISTS HashtagTweet (hashtagid, tweetid)")
 c.execute("CREATE TABLE IF NOT EXISTS Tweet (tweetid, text, username, hashtag, date, time, retweet, favorite, mention, userid, locationid)")
-
 
 def main(argv):
     #graph_data()
@@ -147,12 +144,6 @@ def main(argv):
         print('Başarıyla "TweetAnalysis.db" veritabanına kayıt edildi.')
         conn.close()
         # Counter
-
-
-
-
-
-
 
 def print_color_text():
     print(colored('''\n\t\t\033[1m
