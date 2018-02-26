@@ -7,9 +7,7 @@ import matplotlib.pyplot as plt
 #import pylab as pl
 from geopy.geocoders import Nominatim
 import json
-
 # Tweets are stored in "fname"
-
 
 def analysis_graph():
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
