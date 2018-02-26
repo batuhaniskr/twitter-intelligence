@@ -4,13 +4,7 @@ A project written in Python to get old tweets and tweet analysis.
 
 ## Prerequisites
   <ul>
-  <li>Project written for Python 3.x.</li>
-
-  <li>PyQuery is required for HTML parsing.</li>
-
-  <li>Matplotlib is required for analysis.</li>
-
-  <li>PyQt is required for GUI application.</li>
+  <li>Project written with Python 3.x.</li>
   
   <li>The package dependencies are in the file requirements.txt. Run that command to install the dependencies.</li>
     <br>
