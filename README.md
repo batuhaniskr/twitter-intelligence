@@ -1,6 +1,6 @@
-# Social-Network-Tracking-And-Analysis
+# Social Network Tracking And Analysis
 
-A project written in Python to get old tweets and tweet analysis
+A project written in Python to get old tweets and tweet analysis.
 
 ## Prerequisites
   <ul>
@@ -11,6 +11,9 @@ A project written in Python to get old tweets and tweet analysis
   <li>Matplotlib is required for analysis.</li>
 
   <li>PyQt is required for GUI application.</li>  
+  
+  <li>The package dependencies are in the file requirements.txt. Run that command to install the dependencies.</li>
+  <pre>pip install -r requirements.txt</pre>
 </ul>
 
 ## Database
@@ -28,12 +31,9 @@ A project written in Python to get old tweets and tweet analysis
 <ul>
 <li>Get help</li>
 
-
 <pre> python3 tracking.py -h </pre>
 
-
 <li>Get tweets by username </li>
-
 
 <pre> python3 tracking.py --username "HaberSau" </pre>
 
