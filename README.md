@@ -12,8 +12,7 @@ A project written in Python to get old tweets and tweet analysis.
 
   <li>PyQt is required for GUI application.</li>  
   
-  
-  <li>The package dependencies are in the file requirements.txt. Run that command to install the dependencies.</li>
+  The package dependencies are in the file requirements.txt. Run that command to install the dependencies.
   
   <pre>pip install -r requirements.txt</pre>
   
