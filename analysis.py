@@ -26,9 +26,6 @@ def analysis_graph():
         c.execute("Select text from Tweet")
         tweet = c.fetchall()
         #print(tweet)
-
-
-
         c.execute("Select text from tweet")
         tweet_data = c.fetchall()
         # print(tweet_data)
@@ -52,9 +49,4 @@ def analysis_graph():
         pl.xlabel('Username')
         pl.ylabel('Tweet Count')
         pl.show()
-
-
-  
-
-
 analysis_graph()
