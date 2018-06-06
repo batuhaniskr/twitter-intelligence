@@ -47,4 +47,5 @@ def analysis_graph():
         pl.xlabel('Username')
         pl.ylabel('Tweet Count')
         pl.show()
+
 analysis_graph()
