@@ -19,14 +19,6 @@ def analysis_graph():
         conn = db
 
         c = conn.cursor()
-        c.execute("Select place from location")
-        loc_array=c.fetchall()
-        c.execute("Select text from Tweet")
-        tweet = c.fetchall()
-        #print(tweet)
-        c.execute("Select text from tweet")
-        tweet_data = c.fetchall()
-        # print(tweet_data)
         c.execute("SELECT  username, count(*) as tekrar FROM Tweet  group by username order by tekrar desc LIMIT 10")
         data = c.fetchall()
         ilk=[]
@@ -40,7 +32,7 @@ def analysis_graph():
             pl.figure(1)
             x = range(i)
 
-        pl.bar(x, y, align='center',alpha=1.5)
+        pl.bar(x, y, align='center')
         pl.xticks(x, ilk)
         #pl.plot(x, y, "-")
         pl.title('User - Tweet Count')
