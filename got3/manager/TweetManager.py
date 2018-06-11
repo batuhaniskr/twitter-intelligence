@@ -10,6 +10,7 @@ from termcolor import colored
 class TweetManager:
     def __init__(self):
         pass
+
     @staticmethod
     def getTweets(tweetCriteria, receiveBuffer=None, bufferLength=100):
         refreshCursor = ''
@@ -32,85 +33,81 @@ class TweetManager:
                 break
 
             for tweetHTML in tweets:
-                tweetPQ = PyQuery(tweetHTML)
-                tweet = models.Tweet()
+                try:
+                    tweetPQ = PyQuery(tweetHTML)
+                    tweet = models.Tweet()
 
-                usernameTweet = tweetPQ("b").html();
+                    usernameTweet = tweetPQ("b").html();
 
-                txt = re.sub(r"\s+", " ", tweetPQ("p.js-tweet-text").text().replace('# ', '#').replace('@ ', '@'));
+                    txt = re.sub(r"\s+", " ", tweetPQ("p.js-tweet-text").text().replace('# ', '#').replace('@ ', '@'));
 
-                print(colored("@","red") + colored(usernameTweet,"red")+colored(": ","red")+txt+"\n")
-                retweets = int(tweetPQ("span.ProfileTweet-action--retweet span.ProfileTweet-actionCount").attr(
-                    "data-tweet-stat-count").replace(",", ""));
-                favorites = int(tweetPQ("span.ProfileTweet-action--favorite span.ProfileTweet-actionCount").attr(
-                    "data-tweet-stat-count").replace(",", ""));
-                dateSec = int(tweetPQ("small.time span.js-short-timestamp").attr("data-time"));
-                id = tweetPQ.attr("data-tweet-id");
-                permalink = tweetPQ.attr("data-permalink-path");
-                user_id = int(tweetPQ("a.js-user-profile-link").attr("data-user-id"))
+                    print(colored("@","red") + colored(usernameTweet,"red")+colored(": ","red")+txt+"\n")
+                    retweets = int(tweetPQ("span.ProfileTweet-action--retweet span.ProfileTweet-actionCount").attr(
+                        "data-tweet-stat-count").replace(",", ""));
+                    favorites = int(tweetPQ("span.ProfileTweet-action--favorite span.ProfileTweet-actionCount").attr(
+                        "data-tweet-stat-count").replace(",", ""));
+                    dateSec = int(tweetPQ("small.time span.js-short-timestamp").attr("data-time"));
+                    id = tweetPQ.attr("data-tweet-id");
+                    permalink = tweetPQ.attr("data-permalink-path");
+                    user_id = int(tweetPQ("a.js-user-profile-link").attr("data-user-id"))
 
-                page = requests.get('https://twitter.com/tubiity/status/'+id)
-                script_geo =html.fromstring(page.content)
-                location = script_geo.xpath('//a[@class="u-textUserColor js-nav js-geo-pivot-link"]/text()')
-                sp_location = ','.join(location)
-                geo = ''
+                    page = requests.get('https://twitter.com/tubiity/status/'+id)
+                    script_geo =html.fromstring(page.content)
+                    location = script_geo.xpath('//a[@class="u-textUserColor js-nav js-geo-pivot-link"]/text()')
+                    sp_location = ','.join(location)
+                    geo = ''
 
-                geoSpan = tweetPQ('span.Tweet-geo')
-                if len(geoSpan) > 0:
-                    geo = geoSpan.attr('title')
-                urls = []
+                    geoSpan = tweetPQ('span.Tweet-geo')
+                    if len(geoSpan) > 0:
+                        geo = geoSpan.attr('title')
+                    urls = []
 
-                #userInformation
+                    #userInformation
 
-                result = requests.get("https://twitter.com/"+usernameTweet)
-                c = result.content
+                    result = requests.get("https://twitter.com/"+usernameTweet)
+                    c = result.content
 
-                soup = BeautifulSoup(c, "html.parser")
-                liste = []
-                samples = soup.find_all("a",
-                                        "ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-openSignupDialog js-nonNavigable u-textUserColor")
-                for a in samples:
-                    liste.append(a.attrs['title'])
-                #Takip Edilen, Takipçi ve Beğeni Sayısı tutuluyor liste içerisinde
+                    soup = BeautifulSoup(c, "html.parser")
+                    liste = []
+                    samples = soup.find_all("a",
+                                            "ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-openSignupDialog js-nonNavigable u-textUserColor")
+                    #Follower, Follow and number of likes in list
+                    for a in samples:
+                        liste.append(a.attrs['title'])
 
-                #print(liste)
+                    for link in tweetPQ("a"):
+                        try:
+                            urls.append((link.attrib["data-expanded-url"]))
+                        except KeyError:
+                            pass
+                    tweet.id = id
+                    tweet.permalink = 'https://twitter.com' + permalink
+                    tweet.username = usernameTweet
+                    tweet.user_id = user_id
+                    tweet.text = txt
+                    tweet.date = datetime.datetime.fromtimestamp(dateSec)+datetime.timedelta(hours=2)
+                    tweet.formatted_date = datetime.datetime.fromtimestamp(dateSec).strftime("%a %b %d %X +0000 %Y")
+                    tweet.retweets = retweets
+                    tweet.favorites = favorites
+                    tweet.mentions = " ".join(re.compile('(@\\w*)').findall(tweet.text))
+                    tweet.hashtags = " ".join(re.compile('(#\\w*)').findall(tweet.text))
+                    tweet.geo = sp_location
+                    tweet.urls = ",".join(urls)
+                    tweet.author_id = user_id
 
+                    results.append(tweet)
+                    resultsAux.append(tweet)
 
+                    if receiveBuffer and len(resultsAux) >= bufferLength:
+                        receiveBuffer(resultsAux)
+                        resultsAux = []
 
-                for link in tweetPQ("a"):
-                    try:
-                        urls.append((link.attrib["data-expanded-url"]))
-                    except KeyError:
-                        pass
-                tweet.id = id
-                tweet.permalink = 'https://twitter.com' + permalink
-                tweet.username = usernameTweet
-                tweet.user_id = user_id
-                tweet.text = txt
-                tweet.date = datetime.datetime.fromtimestamp(dateSec)+datetime.timedelta(hours=2)
-                tweet.formatted_date = datetime.datetime.fromtimestamp(dateSec).strftime("%a %b %d %X +0000 %Y")
-                tweet.retweets = retweets
-                tweet.favorites = favorites
-                tweet.mentions = " ".join(re.compile('(@\\w*)').findall(tweet.text))
-                tweet.hashtags = " ".join(re.compile('(#\\w*)').findall(tweet.text))
-                tweet.geo = sp_location
-                tweet.urls = ",".join(urls)
-                tweet.author_id = user_id
-
-                #follow, follower, like
-
-
-
-                results.append(tweet)
-                resultsAux.append(tweet)
-
-                if receiveBuffer and len(resultsAux) >= bufferLength:
+                    if tweetCriteria.maxTweets > 0 and len(results) >= tweetCriteria.maxTweets:
+                        active = False
+                        break
+                except:
                     receiveBuffer(resultsAux)
-                    resultsAux = []
-
-                if tweetCriteria.maxTweets > 0 and len(results) >= tweetCriteria.maxTweets:
-                    active = False
-                    break
+                    return
 
         if receiveBuffer and len(resultsAux) > 0:
             receiveBuffer(resultsAux)
@@ -141,9 +138,6 @@ class TweetManager:
             urlLang = ''
         url = url % (urllib.parse.quote(urlGetData), urlLang, refreshCursor)
 
-        #print(url)
-        # print(url)
-
         headers = [
             ('Host', "twitter.com"),
             ('User-Agent', "Mozilla/5.0 (Windows NT 6.1; Win64; x64)"),
@@ -172,5 +166,3 @@ class TweetManager:
         dataJson = json.loads(jsonResponse.decode())
 
         return dataJson
-
-

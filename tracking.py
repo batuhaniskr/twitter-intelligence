@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import sys, getopt, got3, datetime, codecs, sqlite3
+import sys, getopt, got3
 import sqlite3
-from collections import Counter
 from geopy.geocoders import Nominatim
-import numpy as np
-import matplotlib.pyplot as plt
 from termcolor import colored
-import pandas as pd
 
 conn = sqlite3.connect('TweetAnalysis.db')
 conn.row_factory = lambda cursor, row: row[1]
@@ -107,7 +103,6 @@ def main(argv):
                 userexist = c.fetchone()
                 if userexist is None:
                     c.execute("INSERT INTO Tweet VALUES (?,?,?,?,?,?,?,?,?,?,?)", paramsTweet)
-
                 # aynı içeriğin olup olmama kontrolü
                 if(t.geo!=""):
                     geolocator = Nominatim()
@@ -129,19 +124,16 @@ def main(argv):
                 if userexist is None:
                     c.execute("INSERT OR IGNORE INTO User VALUES(?,?,?)", paramsUser)
 
-
                 conn.commit()
             print('More %d saved on file...\n' % len(tweets))
 
-
         got3.manager.TweetManager.getTweets(tweetCriteria, receiveBuffer)
-
 
     except arg:
         print('You must pass some parameters. Use \"-h\" to help.' + arg)
 
     finally:
-        print('Başarıyla "TweetAnalysis.db" veritabanına kayıt edildi.')
+        print('Succesfully saved in the database.')
         conn.close()
         # Counter
 
