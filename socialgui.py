@@ -9,7 +9,7 @@ from PyQt4 import QtCore, QtGui
 import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-import getopt, got3, datetime, codecs, sqlite3
+import getopt, parser, datetime, codecs, sqlite3
 import analysis
 import pandas as pd
 import pandas
@@ -183,7 +183,7 @@ class Ui_MainWindow(object):
         analysis.analysis_graph()
 
     def tracking(self):
-        tweetCriteria = got3.manager.TweetCriteria()
+        tweetCriteria = parser.manager.TweetCriteria()
 
         tweetCriteria.username = self.lineEdit_2.text()
         tweetCriteria.querySearch = self.lineEdit.text()
@@ -258,7 +258,7 @@ class Ui_MainWindow(object):
                 conn.commit()
             print('Veritabanına %d tweet daha kaydedildi...\n' % len(tweets))
 
-        got3.manager.TweetManager.getTweets(tweetCriteria, receiveBuffer)
+        parser.manager.TweetManager.getTweets(tweetCriteria, receiveBuffer)
 
 
 

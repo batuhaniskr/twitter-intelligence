@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import sys, getopt, got3
+import sys, getopt, parser
 import sqlite3
 from geopy.geocoders import Nominatim
 from termcolor import colored
@@ -45,7 +45,7 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "", ("username=", "since=", "until=", "query=", "toptweets=", "maxtweets="))
 
-        tweetCriteria = got3.manager.TweetCriteria()
+        tweetCriteria = parser.manager.TweetCriteria()
 
         for opt, arg in opts:
             if opt == '--username':
@@ -87,15 +87,12 @@ def main(argv):
                     if hash != "":
                         hashtagid = hashtagid + 1
                         c.execute("SELECT * FROM hashtag where content = '%s'" % hash)
-                        #aynı içeriğin olup olmama kontrolü
                         exits = c.fetchone()
                         if exits is None:
                             c.execute("SELECT hashtag FROM tweet ")
 
                             c.execute("INSERT OR IGNORE INTO HashtagTweet VALUES (?,?)", paramsHashagTweet)
                             c.execute("INSERT OR IGNORE INTO Hashtag  VALUES (?,?)", paramsHashtag)
-
-                a=t.date.strftime('%H:%M')
 
                 paramsTweet = (t.id, t.text, t.username,t.hashtags, t.date.strftime('%Y-%m-%d'),t.date.strftime('%H:%M'), t.retweets, t.favorites, t.mentions,t.user_id, locationid)
 
@@ -127,7 +124,7 @@ def main(argv):
                 conn.commit()
             print('More %d saved on file...\n' % len(tweets))
 
-        got3.manager.TweetManager.getTweets(tweetCriteria, receiveBuffer)
+        parser.manager.TweetManager.getTweets(tweetCriteria, receiveBuffer)
 
     except arg:
         print('You must pass some parameters. Use \"-h\" to help.' + arg)
@@ -135,7 +132,6 @@ def main(argv):
     finally:
         print('Succesfully saved in the database.')
         conn.close()
-        # Counter
 
 def print_color_text():
     print(colored('''\n\t\t\033[1m
