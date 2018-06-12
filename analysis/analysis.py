@@ -37,12 +37,12 @@ def analysis_graph():
         #Hashtag Analysis
         c.execute("SELECT hashtag from Tweet")
         hashtag_list = []
-        for i in c.fetchall():
-            if " " in ''.join(i):
+        for row in c.fetchall():
+            if " " in ''.join(row):
                 for m in ''.join(i).split(' '):
                     hashtag_list.append(m)
             else:
-                signle_item  = ''.join(i)
+                signle_item  = ''.join(row)
                 hashtag_list.append(signle_item)
 
         print(Counter(hashtag_list))
