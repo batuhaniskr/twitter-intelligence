@@ -2,12 +2,7 @@ import matplotlib.pyplot as pl
 from collections import Counter
 import sqlite3, os
 import os.path
-import pandas as pd
-import matplotlib.pyplot as plt
-#import pylab as pl
-from geopy.geocoders import Nominatim
-import json
-# Tweets are stored in "fname"
+import numpy as np
 
 def analysis_graph():
     ROOT_DIR = os.path.dirname(os.pardir)
@@ -16,13 +11,13 @@ def analysis_graph():
     with sqlite3.connect(db_path) as db:
 
         conn = db
-
         c = conn.cursor()
+
+        #username - tweet analysis
         c.execute("SELECT  username, count(*) as tekrar FROM Tweet  group by username order by tekrar desc LIMIT 10")
         data = c.fetchall()
         ilk=[]
         y=[]
-        xTicks=[]
         i=0
         for row in data:
             ilk.append(row[0])
@@ -39,10 +34,35 @@ def analysis_graph():
         pl.ylabel('Tweet Count')
         pl.show()
 
-
+        #Hashtag Analysis
         c.execute("SELECT hashtag from Tweet")
-        print(Counter(c.fetchall()))
+        hashtag_list = []
+        for i in c.fetchall():
+            if " " in ''.join(i):
+                for m in ''.join(i).split(' '):
+                    hashtag_list.append(m)
+            else:
+                signle_item  = ''.join(i)
+                hashtag_list.append(signle_item)
 
+        print(Counter(hashtag_list))
+        counter = Counter(hashtag_list)
+
+        pl.rcdefaults()
+        # Counter data, counter is your counter object
+        keys = counter.keys()
+        y_pos = np.arange(len(keys))
+        # get the counts for each key, assuming the values are numerical
+        performance = [counter[k] for k in keys]
+        print(performance)
+        # not sure if you want this :S
+        error = np.random.rand(len(keys))
+
+        pl.barh(y_pos, performance, xerr=error, align='center', alpha=0.4, )
+        pl.yticks(y_pos, keys)
+        pl.xlabel('quantity')
+        pl.title('hashtags')
+        pl.show()
 
 analysis_graph()
 
