@@ -10,9 +10,8 @@ import json
 # Tweets are stored in "fname"
 
 def analysis_graph():
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(BASE_DIR, "TweetAnalysis.db")
-    locxy = []
+    ROOT_DIR = os.path.dirname(os.pardir)
+    db_path = os.path.join(ROOT_DIR, "TweetAnalysis.db")
 
     with sqlite3.connect(db_path) as db:
 
@@ -40,4 +39,10 @@ def analysis_graph():
         pl.ylabel('Tweet Count')
         pl.show()
 
+
+        c.execute("SELECT hashtag from Tweet")
+        print(Counter(c.fetchall()))
+
+
 analysis_graph()
+
