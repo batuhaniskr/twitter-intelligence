@@ -8,6 +8,7 @@ import numpy as np
 from geopy.geocoders import Nominatim
 from flask import Flask, render_template
 import json
+import settings
 
 ROOT_DIR = os.path.dirname(os.pardir)
 db_path = os.path.join(ROOT_DIR, "TweetAnalysis.db")
@@ -100,8 +101,9 @@ app = Flask(__name__)
 @app.route('/locations')
 def map():
    location = location_analysis()
-
-   return render_template('locations.html', location = location)
+   api_key = settings.GOOGLE_MAP_API_KEY
+   url = 'https://maps.googleapis.com/maps/api/js?key=' + api_key + '&libraries=visualization&callback=initMap'
+   return render_template('locations.html', location = location, url= url)
 
 if __name__ == '__main__':
     app.run()
