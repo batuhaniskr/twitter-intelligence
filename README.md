@@ -41,7 +41,7 @@ A project written in Python to get old tweets and tweet analysis.
 <pre> python3 tracking.py --query "sakarya" </pre>
 
 
-<li>Get twit at a specific date range</li>
+<li>Get tweet at a specific date range</li>
 
 
 <pre> python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10 </pre>
@@ -50,6 +50,14 @@ Application work view:
 
 ![screenshot from 2017-06-11 22-23-16](https://user-images.githubusercontent.com/17202632/27014790-793342d0-4f08-11e7-951e-5bc374504a48.png)
 </ul>
+
+### location analysis: 
+
+![map](https://user-images.githubusercontent.com/17202632/41524483-5baf98be-72e6-11e8-9130-c6db7380ae5d.png)
+
+location analysis runs through address http://localhost:5000/locations
+
+There is also user -tweet and hashtag analysis.
 
 ## Graphical User Interface
 
