@@ -26,6 +26,7 @@ A project written in Python to get old tweets and tweet analysis.
 ## Command-line usage
 
 <ul>
+  
 <li>Get help</li>
 
 <pre> python3 tracking.py -h </pre>
@@ -54,10 +55,12 @@ Application work view:
 ## Analysis
 
  analysis.py performs analysis processing. User, hashtag and location analyzes are performed.
-Get Help:
+
+<li>Get help:</li>
 <pre>python3 analysis.py -h</pre> 
 
-<pre>python3 analysis py --location for location analysis</pre>
+<li>for location analysis </li>
+<pre>python3 analysis py --location</pre>
 
 ![map](https://user-images.githubusercontent.com/17202632/41524483-5baf98be-72e6-11e8-9130-c6db7380ae5d.png)
 
@@ -67,9 +70,9 @@ You have to write Google Map Api Key in setting.py for view location google map.
 
 <pre>GOOGLE_MAP_API_KEY='YOUR_GOOGLE_MAP_API_KEY'</pre>
 
-<li>for user analysis.</li>
+<li>Runs user analysis.</li>
 <pre>python3 analysis.py --user</pre> 
-<li>for hashtag analysis.</li>
+<li>Runs hashtag analysis.</li>
 <pre>python3 analysis.py --hashtag</pre> 
 
 There is also user -tweet and hashtag analysis.
