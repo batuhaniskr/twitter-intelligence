@@ -17,7 +17,6 @@ db_path = os.path.join(ROOT_DIR, "TweetAnalysis.db")
 
 app = Flask(__name__)
 
-
 def main(argv):
 
     if len(argv) == 1 and argv[0] == '-h':
@@ -35,7 +34,8 @@ def main(argv):
 
     for opt, arg in opts:
         if opt == '--location':
-            app.run()
+            port = settings.PORT
+            app.run('127.0.0.1', port=port)
         elif opt == '--user':
             analysis_user()
         elif opt == '--hashtag':
