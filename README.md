@@ -75,8 +75,6 @@ You have to write Google Map Api Key in setting.py for view location google map.
 <li>Runs hashtag analysis.</li>
 <pre>python3 analysis.py --hashtag</pre> 
 
-There is also user -tweet and hashtag analysis.
-
 ## Graphical User Interface
 
  socialgui.py used for gui application
