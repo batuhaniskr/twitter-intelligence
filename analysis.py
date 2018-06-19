@@ -19,6 +19,18 @@ app = Flask(__name__)
 
 
 def main(argv):
+
+    if len(argv) == 1 and argv[0] == '-h':
+        print("""
+                    [Analysis]
+                    
+ [--location] for location analysis
+ [--hashtag]  for hashtag analysis
+ [--user]     for user location analysis
+        """)
+
+        return
+
     opts, args = getopt.getopt(argv, "", ("hashtag", "user", "location", "h"))
 
     for opt, arg in opts:
@@ -28,8 +40,7 @@ def main(argv):
             analysis_user()
         elif opt == '--hashtag':
             analysis_hashtag()
-        elif opt == '--h':
-            print("help")
+
 
 @app.route('/locations')
 def map():
@@ -38,6 +49,7 @@ def map():
     url = 'https://maps.googleapis.com/maps/api/js?key=' + api_key + '&libraries=visualization&callback=initMap'
 
     return render_template('locations.html', location=location, url=url)
+
 
 def analysis_user():
     with sqlite3.connect(db_path) as db:
@@ -92,6 +104,7 @@ def analysis_hashtag():
         pl.title('hashtags')
         pl.show()
 
+
 def location_analysis():
     with sqlite3.connect(db_path) as db:
         conn = db
@@ -120,9 +133,11 @@ def location_analysis():
 
                 geo_data['features'].append(geo_json_feature)
                 locxy.clear()
+
         json_location = json.dumps(geo_data)
 
         return json_location
+
 
 if __name__ == '__main__':
     main(sys.argv[1:])
