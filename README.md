@@ -67,11 +67,10 @@ You have to write Google Map Api Key in setting.py for view location google map.
 
 <pre>GOOGLE_MAP_API_KEY='YOUR_GOOGLE_MAP_API_KEY'</pre>
 
+<li>for user analysis.</li>
 <pre>python3 analysis.py --user</pre> 
-for user analysis.
+<li>for hashtag analysis.</li>
 <pre>python3 analysis.py --hashtag</pre> 
-for hashtag analysis.
-
 
 There is also user -tweet and hashtag analysis.
 
