@@ -66,7 +66,7 @@ Application work view:
 
 location analysis runs through address http://localhost:5000/locations
 
-You have to write Google Map Api Key in setting.py for view location google map.
+You must write Google Map Api Key in setting.py to display google map.
 
 <pre>GOOGLE_MAP_API_KEY='YOUR_GOOGLE_MAP_API_KEY'</pre>
 
