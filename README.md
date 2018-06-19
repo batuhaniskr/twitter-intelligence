@@ -51,11 +51,27 @@ Application work view:
 ![screenshot from 2017-06-11 22-23-16](https://user-images.githubusercontent.com/17202632/27014790-793342d0-4f08-11e7-951e-5bc374504a48.png)
 </ul>
 
-### location analysis: 
+## Analysis
+
+ analysis.py performs analysis processing. User, hashtag and location analyzes are performed.
+Get Help:
+<pre>python3 analysis.py -h</pre> 
+
+<pre>python3 analysis py --location for location analysis</pre>
 
 ![map](https://user-images.githubusercontent.com/17202632/41524483-5baf98be-72e6-11e8-9130-c6db7380ae5d.png)
 
 location analysis runs through address http://localhost:5000/locations
+
+You have to write Google Map Api Key in setting.py for view location google map.
+
+<pre>GOOGLE_MAP_API_KEY='YOUR_GOOGLE_MAP_API_KEY'</pre>
+
+<pre>python3 analysis.py --user</pre> 
+for user analysis.
+<pre>python3 analysis.py --hashtag</pre> 
+for hashtag analysis.
+
 
 There is also user -tweet and hashtag analysis.
 
