@@ -17,8 +17,8 @@ db_path = os.path.join(ROOT_DIR, "TweetAnalysis.db")
 
 app = Flask(__name__)
 
-def main(argv):
 
+def main(argv):
     if len(argv) == 1 and argv[0] == '-h':
         print("""
                     [Analysis]
