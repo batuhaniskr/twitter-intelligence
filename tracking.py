@@ -15,7 +15,8 @@ c.execute("CREATE TABLE IF NOT EXISTS Location (locationid, place)")
 c.execute("CREATE TABLE IF NOT EXISTS User (userid, username, locationid)")
 c.execute("CREATE TABLE IF NOT EXISTS Hashtag (hashtagid, content)")
 c.execute("CREATE TABLE IF NOT EXISTS HashtagTweet (hashtagid, tweetid)")
-c.execute("CREATE TABLE IF NOT EXISTS Tweet (tweetid, text, username, hashtag, date, time, retweet, favorite, mention, userid, locationid)")
+c.execute(
+    "CREATE TABLE IF NOT EXISTS Tweet (tweetid, text, username, hashtag, date, time, retweet, favorite, mention, userid, locationid)")
 
 
 def main(argv):
@@ -45,11 +46,9 @@ def main(argv):
         return
     location_value = False
 
-    for param in argv:
-        if param == '-l':
-            location_search = True
     try:
-        opts, args = getopt.getopt(argv, "", ("username=", "since=", "until=", "query=", "toptweets=", "maxtweets=","location="))
+        opts, args = getopt.getopt(argv, "",
+                                   ("username=", "since=", "until=", "query=", "toptweets=", "maxtweets=", "location="))
 
         tweetCriteria = parser.manager.TweetCriteria()
 
@@ -73,6 +72,7 @@ def main(argv):
                 tweetCriteria.maxTweets = int(arg)
             elif opt == '--location':
                 location_value = bool(arg)
+                print(location_value)
 
         print('\n' + colored('Searching...', 'green') + '\n')
 
@@ -81,12 +81,8 @@ def main(argv):
             hashtagid = 1;
             for t in tweets:
                 hashtagstring = t.hashtags
-                # userchefck = t.username
                 str = hashtagstring.split()
-                # print(usercheck)
-                # serstr=usercheck.split()
 
-                # print("text",str)
                 for hash in str:
                     hash_list.append(hash)
                     paramsHashtag = (hashtagid, hash)
@@ -135,7 +131,7 @@ def main(argv):
         print('You must pass some parameters. Use \"-h\" to help.' + arg)
 
     finally:
-        print('Succesfully saved in the database.')
+        print('Succesfully saved to the database.')
         conn.close()
 
 

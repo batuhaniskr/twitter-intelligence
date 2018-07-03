@@ -1,23 +1,24 @@
-import urllib.request, urllib.parse, urllib.error, urllib.request, urllib.error, urllib.parse, json, re, datetime, sys, \
-    http.cookiejar
-from .. import models
-from pyquery import PyQuery
-from lxml import html
+import urllib, urllib.request as urllib2, json, re, datetime, sys, http.cookiejar as cookielib
+
 import requests
-from bs4 import BeautifulSoup
+from lxml import html
 from termcolor import colored
 
+from .. import models
+from pyquery import PyQuery
+
+
 class TweetManager:
+
     def __init__(self):
         pass
 
     @staticmethod
     def getTweets(tweetCriteria, receiveBuffer=None, location_search=False, bufferLength=100, proxy=None):
         refreshCursor = ''
-
         results = []
         resultsAux = []
-
+        cookieJar = cookielib.CookieJar()
 
         if hasattr(tweetCriteria, 'username') and (
                 tweetCriteria.username.startswith("\'") or tweetCriteria.username.startswith("\"")) and (
@@ -28,7 +29,7 @@ class TweetManager:
 
         while active:
             try:
-                json = TweetManager.getJsonReponse(tweetCriteria, refreshCursor, proxy)
+                json = TweetManager.getJsonReponse(tweetCriteria, refreshCursor, cookieJar, proxy)
                 if len(json['items_html'].strip()) == 0:
                     break
 
@@ -46,8 +47,9 @@ class TweetManager:
                     tweet = models.Tweet()
 
                     usernameTweet = tweetPQ("span:first.username.u-dir b").text()
-                    txt = re.sub(r"\s+", " ", tweetPQ("p.js-tweet-text").text().replace('# ', '#').replace('@ ', '@'))
+                    txt = re.sub(r"\s+", " ", tweetPQ("p.js-tweet-text").text())
                     txt = txt.replace('# ', '#')
+                    txt = txt.replace('@ ', '@')
 
                     print(colored("@" + usernameTweet, "red") + colored(": ", "red") + txt + "\n")
 
@@ -57,8 +59,8 @@ class TweetManager:
                         "data-tweet-stat-count").replace(",", ""))
                     dateSec = int(tweetPQ("small.time span.js-short-timestamp").attr("data-time"))
                     id = tweetPQ.attr("data-tweet-id")
-                    user_id = int(tweetPQ("a.js-user-profile-link").attr("data-user-id"))
                     permalink = tweetPQ.attr("data-permalink-path")
+                    user_id = int(tweetPQ("a.js-user-profile-link").attr("data-user-id"))
 
                     if location_search == True:
                         page = requests.get('https://twitter.com/tubiity/status/' + id)
@@ -68,25 +70,21 @@ class TweetManager:
                         tweet.geo = sp_location
                     else:
                         geo = ''
-                        geoSpan = tweetPQ('span.Tweet-geo')
-                        if len(geoSpan) > 0:
-                            geo = geoSpan.attr('title')
                         tweet.geo = geo
 
-                    #user-information
-                    ''' 
-                    If this code block is uncommented, application will be slower due to network traffic
-                    result = requests.get("https://twitter.com/" + usernameTweet)
-                    c = result.content
+                        # user-information
+                        ''' If this code block is uncommented, application will be slower due to response time'''
+                        '''result = requests.get("https://twitter.com/" + usernameTweet)
+                        c = result.content
 
-                    soup = BeautifulSoup(c, "html.parser")
-                    liste = []
-                    samples = soup.find_all("a",
-                                                "ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-openSignupDialog js-nonNavigable u-textUserColor")
-                        # Follower, Follow and number of likes in list
-                    for a in samples:
-                        liste.append(a.attrs['title'])
-                    '''
+                        soup = BeautifulSoup(c, "html.parser")
+                        liste = []
+                        samples = soup.find_all("a",
+                                                    "ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-openSignupDialog js-nonNavigable u-textUserColor")
+                            # Follower, Follow and number of likes in list
+                        for a in samples:
+                            liste.append(a.attrs['title'])
+                        '''
 
                     tweet.id = id
                     tweet.permalink = 'https://twitter.com' + permalink
@@ -109,6 +107,7 @@ class TweetManager:
                     if tweetCriteria.maxTweets > 0 and len(results) >= tweetCriteria.maxTweets:
                         active = False
                         break
+
             except:
                 receiveBuffer(resultsAux)
                 return
@@ -119,32 +118,33 @@ class TweetManager:
         return results
 
     @staticmethod
-    def getJsonReponse(tweetCriteria, refreshCursor, cookieJar):
-        url = "https://twitter.com/i/search/timeline?f=realtime&q=%s&src=typd&%smax_position=%s"
-        #url = "https://twitter.com/search?l?&q=%s "
+    def getJsonReponse(tweetCriteria, refreshCursor, cookieJar, proxy):
+        url = "https://twitter.com/i/search/timeline?f=tweets&q=%s&src=typd&max_position=%s"
 
         urlGetData = ''
+
         if hasattr(tweetCriteria, 'username'):
             urlGetData += ' from:' + tweetCriteria.username
 
-
-
         if hasattr(tweetCriteria, 'querySearch'):
-            urlGetData += ' '+ tweetCriteria.querySearch
+            urlGetData += ' ' + tweetCriteria.querySearch
+
         if hasattr(tweetCriteria, 'since'):
             urlGetData += ' since:' + tweetCriteria.since
 
         if hasattr(tweetCriteria, 'until'):
             urlGetData += ' until:' + tweetCriteria.until
-        if hasattr(tweetCriteria, 'lang'):
-            urlLang = 'lang=' + tweetCriteria.lang + '&'
-        else:
-            urlLang = ''
-        url = url % (urllib.parse.quote(urlGetData), urlLang, refreshCursor)
+
+        if hasattr(tweetCriteria, 'topTweets'):
+            if tweetCriteria.topTweets:
+                url = "https://twitter.com/i/search/timeline?q=%s&src=typd&max_position=%s"
+
+        url = url % (urllib.parse.quote(urlGetData), refreshCursor)
 
         headers = [
             ('Host', "twitter.com"),
-            ('User-Agent', "Mozilla/5.0 (Windows NT 6.1; Win64; x64)"),
+            ('User-Agent',
+             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"),
             ('Accept', "application/json, text/javascript, */*; q=0.01"),
             ('Accept-Language', "de,en-US;q=0.7,en;q=0.3"),
             ('X-Requested-With', "XMLHttpRequest"),
@@ -152,23 +152,23 @@ class TweetManager:
             ('Connection', "keep-alive")
         ]
 
-        opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cookieJar))
+        if proxy:
+            opener = urllib2.build_opener(urllib2.ProxyHandler({'http': proxy, 'https': proxy}),
+                                          urllib2.HTTPCookieProcessor(cookieJar))
+        else:
+            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookieJar))
         opener.addheaders = headers
 
         try:
             response = opener.open(url)
             jsonResponse = response.read()
-        except KeyboardInterrupt:
-            raise
         except:
-            # print("Twitter weird response. Try to see on browser: ", url)
-            print(
-                "Twitter weird response. Try to see on browser: https://twitter.com/search?q=%s&src=typd" % urllib.parse.quote(
-                    urlGetData))
-            print("Unexpected error:", sys.exc_info()[0])
+            print
+            "Twitter weird response. Try to see on browser: https://twitter.com/search?q=%s&src=typd" % urllib.parse.quote(
+                urlGetData)
             sys.exit()
             return
 
-        dataJson = json.loads(jsonResponse.decode())
+        dataJson = json.loads(jsonResponse)
 
         return dataJson
