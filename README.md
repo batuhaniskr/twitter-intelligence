@@ -32,23 +32,22 @@ A project written in Python to get old tweets and tweet analysis.
 <pre> python3 tracking.py -h </pre>
 
 <li>Get tweets by username </li>
-
+<br>
 <pre> python3 tracking.py --username "HaberSau" </pre>
-
 
 <li>Get tweets by query</li>
 
+<br>
 
 <pre> python3 tracking.py --query "sakarya" </pre>
 
 
 <li>Get tweet at a specific date range</li>
-
-
+<br>
 <pre> python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10 </pre>
 
 <li> If you get location of tweets, add --location "True" param but application will be slower due to new response times.
-
+<br>
 <pre> python3 tracking.py --query "sakarya" --location "True"</pre>
 Application work view:
 
