@@ -7,8 +7,6 @@ A project written in Python to get old tweets and tweet analysis.
   <li>This project is a Python 3.x application.</li>
   
   <li>The package dependencies are in the file requirements.txt. Run that command to install the dependencies.</li>
-    <br>
-
   <pre>pip install -r requirements.txt</pre>
   
 </ul>
@@ -41,13 +39,12 @@ A project written in Python to get old tweets and tweet analysis.
 
 <pre> python3 tracking.py --query "sakarya" </pre>
 
-
 <li>Get tweet at a specific date range</li>
 <br>
 <pre> python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10 </pre>
 
 <li> If you get location of tweets, add --location "True" param but application will be slower due to new response times.
-<br>
+<br><br>
 <pre> python3 tracking.py --query "sakarya" --location "True"</pre>
 Application work view:
 
@@ -59,9 +56,11 @@ Application work view:
  analysis.py performs analysis processing. User, hashtag and location analyzes are performed.
 
 <li>Get help:</li>
+<br>
 <pre>python3 analysis.py -h</pre> 
 
 <li>for location analysis </li>
+<br>
 <pre>python3 analysis py --location</pre>
 
 ![map](https://user-images.githubusercontent.com/17202632/41524483-5baf98be-72e6-11e8-9130-c6db7380ae5d.png)
@@ -73,8 +72,10 @@ You must write Google Map Api Key in setting.py to display google map.
 <pre>GOOGLE_MAP_API_KEY='YOUR_GOOGLE_MAP_API_KEY'</pre>
 
 <li>Runs user analysis.</li>
+<br>
 <pre>python3 analysis.py --user</pre> 
 <li>Runs hashtag analysis.</li>
+<br>
 <pre>python3 analysis.py --hashtag</pre> 
 
 ## Graphical User Interface
