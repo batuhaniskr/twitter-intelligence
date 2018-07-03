@@ -115,10 +115,7 @@ def location_analysis():
         c = conn.cursor()
 
         locxy = []
-        c.execute("Select tweetid from tweet")
-        print(c.fetchall())
 
-        c.execute("Insert into location values(?,_)")
         c.execute("Select place from location")
         loc_array = c.fetchall()
 
