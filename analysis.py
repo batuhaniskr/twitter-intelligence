@@ -30,17 +30,21 @@ def main(argv):
 
         return
 
-    opts, args = getopt.getopt(argv, "", ("hashtag", "user", "location", "h"))
+    try:
+        opts, args = getopt.getopt(argv, "", ("hashtag", "user", "location", "h"))
 
-    for opt, arg in opts:
-        if opt == '--location':
-            port = settings.PORT
-            app.run('127.0.0.1', port=port)
-        elif opt == '--user':
-            analysis_user()
-        elif opt == '--hashtag':
-            analysis_hashtag()
-
+        for opt, arg in opts:
+            if opt == '--location':
+                port = settings.PORT
+                app.run('127.0.0.1', port=port)
+            elif opt == '--user':
+                analysis_user()
+            elif opt == '--hashtag':
+                analysis_hashtag()
+            else:
+                print('Invalid selection.')
+    except:
+        print('You must pass some parameters. Use \"-h\" to help.')
 
 @app.route('/locations')
 def map():
@@ -111,6 +115,10 @@ def location_analysis():
         c = conn.cursor()
 
         locxy = []
+        c.execute("Select tweetid from tweet")
+        print(c.fetchall())
+
+        c.execute("Insert into location values(?,_)")
         c.execute("Select place from location")
         loc_array = c.fetchall()
 

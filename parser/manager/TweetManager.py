@@ -12,89 +12,92 @@ class TweetManager:
         pass
 
     @staticmethod
-    def getTweets(tweetCriteria, receiveBuffer=None, bufferLength=100):
+    def getTweets(tweetCriteria, receiveBuffer=None, location_search=False, bufferLength=100, proxy=None):
         refreshCursor = ''
 
         results = []
         resultsAux = []
-        cookieJar = http.cookiejar.CookieJar()
+
+
+        if hasattr(tweetCriteria, 'username') and (
+                tweetCriteria.username.startswith("\'") or tweetCriteria.username.startswith("\"")) and (
+                tweetCriteria.username.endswith("\'") or tweetCriteria.username.endswith("\"")):
+            tweetCriteria.username = tweetCriteria.username[1:-1]
 
         active = True
 
         while active:
-            json = TweetManager.getJsonReponse(tweetCriteria, refreshCursor, cookieJar)
-            if len(json['items_html'].strip()) == 0:
-                break
+            try:
+                json = TweetManager.getJsonReponse(tweetCriteria, refreshCursor, proxy)
+                if len(json['items_html'].strip()) == 0:
+                    break
 
-            refreshCursor = json['min_position']
-            tweets = PyQuery(json['items_html'])('div.js-stream-tweet')
+                refreshCursor = json['min_position']
+                scrapedTweets = PyQuery(json['items_html'])
+                # Remove incomplete tweets withheld by Twitter Guidelines
+                scrapedTweets.remove('div.withheld-tweet')
+                tweets = scrapedTweets('div.js-stream-tweet')
 
-            if len(tweets) == 0:
-                break
+                if len(tweets) == 0:
+                    break
 
-            for tweetHTML in tweets:
-                try:
+                for tweetHTML in tweets:
                     tweetPQ = PyQuery(tweetHTML)
                     tweet = models.Tweet()
 
-                    usernameTweet = tweetPQ("b").html()
-
+                    usernameTweet = tweetPQ("span:first.username.u-dir b").text()
                     txt = re.sub(r"\s+", " ", tweetPQ("p.js-tweet-text").text().replace('# ', '#').replace('@ ', '@'))
-                    txt = txt.replace('# ','#')
+                    txt = txt.replace('# ', '#')
 
-                    print(colored("@","red") + colored(usernameTweet,"red")+colored(": ","red")+txt+"\n")
+                    print(colored("@" + usernameTweet, "red") + colored(": ", "red") + txt + "\n")
+
                     retweets = int(tweetPQ("span.ProfileTweet-action--retweet span.ProfileTweet-actionCount").attr(
-                        "data-tweet-stat-count").replace(",", ""));
+                        "data-tweet-stat-count").replace(",", ""))
                     favorites = int(tweetPQ("span.ProfileTweet-action--favorite span.ProfileTweet-actionCount").attr(
-                        "data-tweet-stat-count").replace(",", ""));
+                        "data-tweet-stat-count").replace(",", ""))
                     dateSec = int(tweetPQ("small.time span.js-short-timestamp").attr("data-time"))
-                    id = tweetPQ.attr("data-tweet-id");
-                    permalink = tweetPQ.attr("data-permalink-path");
+                    id = tweetPQ.attr("data-tweet-id")
                     user_id = int(tweetPQ("a.js-user-profile-link").attr("data-user-id"))
+                    permalink = tweetPQ.attr("data-permalink-path")
 
-                    page = requests.get('https://twitter.com/tubiity/status/'+id)
-                    script_geo =html.fromstring(page.content)
-                    location = script_geo.xpath('//a[@class="u-textUserColor js-nav js-geo-pivot-link"]/text()')
-                    sp_location = ','.join(location)
-                    geo = ''
+                    if location_search == True:
+                        page = requests.get('https://twitter.com/tubiity/status/' + id)
+                        script_geo = html.fromstring(page.content)
+                        location = script_geo.xpath('//a[@class="u-textUserColor js-nav js-geo-pivot-link"]/text()')
+                        sp_location = ','.join(location)
+                        tweet.geo = sp_location
+                    else:
+                        geo = ''
+                        geoSpan = tweetPQ('span.Tweet-geo')
+                        if len(geoSpan) > 0:
+                            geo = geoSpan.attr('title')
+                        tweet.geo = geo
 
-                    geoSpan = tweetPQ('span.Tweet-geo')
-                    if len(geoSpan) > 0:
-                        geo = geoSpan.attr('title')
-                    urls = []
-
-                    #userInformation
-
-                    result = requests.get("https://twitter.com/"+usernameTweet)
+                    #user-information
+                    ''' 
+                    If this code block is uncommented, application will be slower due to network traffic
+                    result = requests.get("https://twitter.com/" + usernameTweet)
                     c = result.content
 
                     soup = BeautifulSoup(c, "html.parser")
                     liste = []
                     samples = soup.find_all("a",
-                                            "ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-openSignupDialog js-nonNavigable u-textUserColor")
-                    #Follower, Follow and number of likes in list
+                                                "ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-openSignupDialog js-nonNavigable u-textUserColor")
+                        # Follower, Follow and number of likes in list
                     for a in samples:
                         liste.append(a.attrs['title'])
+                    '''
 
-                    for link in tweetPQ("a"):
-                        try:
-                            urls.append((link.attrib["data-expanded-url"]))
-                        except KeyError:
-                            pass
                     tweet.id = id
                     tweet.permalink = 'https://twitter.com' + permalink
                     tweet.username = usernameTweet
-                    tweet.user_id = user_id
                     tweet.text = txt
-                    tweet.date = datetime.datetime.fromtimestamp(dateSec)+datetime.timedelta(hours=2)
-                    tweet.formatted_date = datetime.datetime.fromtimestamp(dateSec).strftime("%a %b %d %X +0000 %Y")
+                    tweet.date = datetime.datetime.fromtimestamp(dateSec)
                     tweet.retweets = retweets
                     tweet.favorites = favorites
                     tweet.mentions = " ".join(re.compile('(@\\w*)').findall(tweet.text))
                     tweet.hashtags = " ".join(re.compile('(#\\w*)').findall(tweet.text))
-                    tweet.geo = sp_location
-                    tweet.urls = ",".join(urls)
-                    tweet.author_id = user_id
+                    tweet.user_id = user_id
 
                     results.append(tweet)
                     resultsAux.append(tweet)
@@ -106,9 +109,9 @@ class TweetManager:
                     if tweetCriteria.maxTweets > 0 and len(results) >= tweetCriteria.maxTweets:
                         active = False
                         break
-                except:
-                    receiveBuffer(resultsAux)
-                    return
+            except:
+                receiveBuffer(resultsAux)
+                return
 
         if receiveBuffer and len(resultsAux) > 0:
             receiveBuffer(resultsAux)
@@ -155,6 +158,8 @@ class TweetManager:
         try:
             response = opener.open(url)
             jsonResponse = response.read()
+        except KeyboardInterrupt:
+            raise
         except:
             # print("Twitter weird response. Try to see on browser: ", url)
             print(

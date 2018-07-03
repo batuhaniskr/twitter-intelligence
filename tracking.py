@@ -43,9 +43,13 @@ def main(argv):
  """ + colored('# Get the last 10 top tweets by username\n', 'green') + """
  python3 tracking.py --username "HaberSau" --maxtweets 10 --toptweets\n""")
         return
+    location_value = False
 
+    for param in argv:
+        if param == '-l':
+            location_search = True
     try:
-        opts, args = getopt.getopt(argv, "", ("username=", "since=", "until=", "query=", "toptweets=", "maxtweets="))
+        opts, args = getopt.getopt(argv, "", ("username=", "since=", "until=", "query=", "toptweets=", "maxtweets=","location="))
 
         tweetCriteria = parser.manager.TweetCriteria()
 
@@ -67,7 +71,9 @@ def main(argv):
 
             elif opt == '--maxtweets':
                 tweetCriteria.maxTweets = int(arg)
-        # print_color_text()
+            elif opt == '--location':
+                location_value = bool(arg)
+
         print('\n' + colored('Searching...', 'green') + '\n')
 
         def receiveBuffer(tweets):
@@ -104,11 +110,7 @@ def main(argv):
                 userexist = c.fetchone()
                 if userexist is None:
                     c.execute("INSERT INTO Tweet VALUES (?,?,?,?,?,?,?,?,?,?,?)", paramsTweet)
-                # aynı içeriğin olup olmama kontrolü
-                if (t.geo != ""):
-                    geolocator = Nominatim()
-                    location = geolocator.geocode("")
-                    # print(location)
+
                 paramsLocation = (locationid, t.geo)
                 c.execute("SELECT * FROM location where place = '%s'" % t.geo)
                 locationexist = c.fetchone()
@@ -116,7 +118,7 @@ def main(argv):
                     c.execute("INSERT INTO Location VALUES(?,?)", paramsLocation)
                     locationid = locationid + 1
 
-                c.execute("SELECT *FROM location where place = '%s'" % t.geo)
+                c.execute("SELECT * FROM location where place = '%s'" % t.geo)
                 locatuid = c.fetchone()
                 paramsUser = (t.user_id, t.username, locatuid)
                 c.execute("SELECT * FROM user where username ='%s'" % t.username)
@@ -127,7 +129,7 @@ def main(argv):
                 conn.commit()
             print('More %d saved on file...\n' % len(tweets))
 
-        parser.manager.TweetManager.getTweets(tweetCriteria, receiveBuffer)
+        parser.manager.TweetManager.getTweets(tweetCriteria, receiveBuffer, location_search=location_value)
 
     except arg:
         print('You must pass some parameters. Use \"-h\" to help.' + arg)
