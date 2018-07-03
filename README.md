@@ -7,6 +7,7 @@ A project written in Python to get old tweets and tweet analysis.
   <li>This project is a Python 3.x application.</li>
   
   <li>The package dependencies are in the file requirements.txt. Run that command to install the dependencies.</li>
+  <br>
   <pre>pip install -r requirements.txt</pre>
   
 </ul>
