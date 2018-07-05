@@ -27,21 +27,20 @@ def main(argv):
     if len(argv) == 1 and argv[0] == '-h':
         print_color_text()
         print("""
- \n""" + colored("Examples:\n", "blue") + """
+ \n""" + colored(" Examples:\n", "blue") + """
   """ + colored('# Get tweets by username\n', 'green') +
               """
        python3 tracking.py --username "HaberSau"\n
       
-       """ + colored('# Get tweets by query\n', 'green') +
+  """ + colored('# Get tweets by query\n', 'green') +
               """
        python3 tracking.py --query "sakarya"\n
       
-       """ + colored('# Get twit at a specific date range\n', 'green') + """
- python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10\n
+  """ + colored('# Get twit at a specific date range\n', 'green') + """
+       python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10\n
 
-
- """ + colored('# Get the last 10 top tweets by username\n', 'green') + """
- python3 tracking.py --username "HaberSau" --maxtweets 10 --toptweets\n""")
+ """ + colored(' # Get the last 10 top tweets by username\n', 'green') + """
+       python3 tracking.py --username "HaberSau" --maxtweets 10 --toptweets\n""")
         return
     location_value = False
 
@@ -136,22 +135,10 @@ def main(argv):
 
 def print_color_text():
     print(colored('''\n\t\t\033[1m
-                      __            _       _       __     _                      _
-                     / _\ ___   ___(_) __ _| |   /\ \ \___| |___      _____  _ __| | __
-                     \ \ / _ \ / __| |/ _` | |  /  \/ / _ \ __\ \ /\ / / _ \| '__| |/ /
-                     _\ \ (_) | (__| | (_| | | / /\  /  __/ |_ \ V  V / (_) | |  |   <
-                     \__/\___/ \___|_|\__,_|_| \_\ \/ \___|\__| \_/\_/ \___/|_|  |_|\_\
-
-            _____                _    _                               _     _               _           _
-           /__   \_ __ __ _  ___| | _(_)_ __   __ _    __ _ _ __   __| |   /_\  _ __   __ _| |_   _ ___(_)___
-             / /\/ '__/ _` |/ __| |/ / | '_ \ / _` |  / _` | '_ \ / _` |  //_\\| '_ \ / _` | | | | / __| / __|
-            / /  | | | (_| | (__|   <| | | | | (_| | | (_| | | | | (_| | /  _  \ | | | (_| | | |_| \__ \ \__ \\
-            \/   |_|  \__,_|\___|_|\_\_|_| |_|\__, |  \__,_|_| |_|\__,_| \_/ \_/_| |_|\__,_|_|\__, |___/_|___/
-                                              |___/                                           |___/
-
-
-
-                   ''', 'blue'))
+        ▀▀█▀▀ █░░░█ ░▀░ ▀▀█▀▀ ▀▀█▀▀ █▀▀ █▀▀█   ░▀░ █▀▀▄ ▀▀█▀▀ █▀▀ █░░ █░░ ░▀░ █▀▀▀ █▀▀ █▀▀▄ █▀▀ █▀▀
+        ░░█░░ █▄█▄█ ▀█▀ ░░█░░ ░░█░░ █▀▀ █▄▄▀   ▀█▀ █░░█ ░░█░░ █▀▀ █░░ █░░ ▀█▀ █░▀█ █▀▀ █░░█ █░░ █▀▀
+        ░░▀░░ ░▀░▀░ ▀▀▀ ░░▀░░ ░░▀░░ ▀▀▀ ▀░▀▀   ▀▀▀ ▀░░▀ ░░▀░░ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀
+                       ''', 'blue'))
 
 
 if __name__ == '__main__':
