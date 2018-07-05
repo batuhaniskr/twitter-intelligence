@@ -1,6 +1,6 @@
 # Twitter Intelligence
 
-A project written in Python to twitter tracking and analysis without Twitter API.
+A project written in Python to twitter tracking and analysis without using Twitter API.
 
 ## Prerequisites
   <ul>
