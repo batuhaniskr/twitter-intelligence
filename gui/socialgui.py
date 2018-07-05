@@ -183,7 +183,7 @@ class Ui_MainWindow(object):
         analysis.analysis_graph()
 
     def tracking(self):
-        tweet_criteria = parser.manager.TweetCriteria()
+        tweet_criteria = parser.operation.TweetCriteria()
 
         tweet_criteria.username = self.lineEdit_2.text()
         tweet_criteria.query = self.lineEdit.text()
@@ -258,7 +258,7 @@ class Ui_MainWindow(object):
                 conn.commit()
             print('Veritabanına %d tweet daha kaydedildi...\n' % len(tweets))
 
-        parser.manager.TweetManager.get_tweets(tweet_criteria, receiveBuffer)
+        parser.operation.TweetManager.get_tweets(tweet_criteria, receiveBuffer)
 
 
 

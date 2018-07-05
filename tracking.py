@@ -49,7 +49,7 @@ def main(argv):
         opts, args = getopt.getopt(argv, "",
                                    ("username=", "since=", "until=", "query=", "toptweets=", "maxtweets=", "location="))
 
-        tweet_criteria = parser.manager.TweetCriteria()
+        tweet_criteria = parser.operation.TweetCriteria()
 
         for opt, arg in opts:
             if opt == '--username':
@@ -124,7 +124,7 @@ def main(argv):
                 conn.commit()
             print('%d tweet received...\n' % len(tweets))
 
-        parser.manager.TweetManager.get_tweets(tweet_criteria, receive_buffer, location_search=location_value)
+        parser.operation.TweetManager.get_tweets(tweet_criteria, receive_buffer, location_search=location_value)
 
     except arg:
         print('You must pass some parameters. Use \"-h\" to help.' + arg)
