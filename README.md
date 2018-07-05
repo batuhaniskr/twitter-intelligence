@@ -1,6 +1,6 @@
-# Social Network Tracking And Analysis
+# Twitter Intelligence
 
-A project written in Python to get old tweets and tweet analysis.
+A project written in Python to twitter tracking and analysis without Twitter API.
 
 ## Prerequisites
   <ul>
