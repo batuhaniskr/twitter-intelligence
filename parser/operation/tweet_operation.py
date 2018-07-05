@@ -3,7 +3,7 @@ import requests
 from lxml import html
 from termcolor import colored
 
-from .. import models
+from .. import model
 from pyquery import PyQuery
 
 
@@ -43,7 +43,7 @@ class TweetManager:
 
                 for tweet_html in tweets:
                     tweetPQ = PyQuery(tweet_html)
-                    tweet = models.Tweet()
+                    tweet = model.Tweet()
 
                     username_tweet = tweetPQ("span:first.username.u-dir b").text()
                     txt = re.sub(r"\s+", " ", tweetPQ("p.js-tweet-text").text())
@@ -139,7 +139,7 @@ class TweetManager:
                 url = "https://twitter.com/i/search/timeline?q=%s&src=typd&max_position=%s"
 
         url = url % (urllib.parse.quote(url_data), refresh_cursor)
-        print(url)
+
         headers = [
             ('Host', "twitter.com"),
             ('User-Agent',
