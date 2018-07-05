@@ -15,8 +15,8 @@ class TweetCriteria:
 		self.until = until
 		return self
 		
-	def setQuerySearch(self, querySearch):
-		self.querySearch = querySearch
+	def setQuerySearch(self, query):
+		self.query = query
 		return self
 		
 	def setMaxTweets(self, maxTweets):

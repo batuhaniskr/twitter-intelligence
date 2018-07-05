@@ -183,16 +183,16 @@ class Ui_MainWindow(object):
         analysis.analysis_graph()
 
     def tracking(self):
-        tweetCriteria = parser.manager.TweetCriteria()
+        tweet_criteria = parser.manager.TweetCriteria()
 
-        tweetCriteria.username = self.lineEdit_2.text()
-        tweetCriteria.querySearch = self.lineEdit.text()
+        tweet_criteria.username = self.lineEdit_2.text()
+        tweet_criteria.query = self.lineEdit.text()
         if (self.lineEdit_3.text() != ""):
-            tweetCriteria.since =  self.lineEdit_3.text()
+            tweet_criteria.since =  self.lineEdit_3.text()
         if (self.lineEdit_4.text() != ""):
-            tweetCriteria.until = self.lineEdit_4.text()
+            tweet_criteria.until = self.lineEdit_4.text()
         if (self.lineEdit_5.text() != ""):
-            tweetCriteria.maxTweets = int(self.lineEdit_5.text())
+            tweet_criteria.maxTweets = int(self.lineEdit_5.text())
 
 
 
@@ -258,7 +258,7 @@ class Ui_MainWindow(object):
                 conn.commit()
             print('Veritabanına %d tweet daha kaydedildi...\n' % len(tweets))
 
-        parser.manager.TweetManager.getTweets(tweetCriteria, receiveBuffer)
+        parser.manager.TweetManager.get_tweets(tweet_criteria, receiveBuffer)
 
 
 

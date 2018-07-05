@@ -1,2 +1,2 @@
-from .TweetCriteria import TweetCriteria
-from .TweetManager import TweetManager
+from .tweet_criteria import TweetCriteria
+from .tweet_manager import TweetManager

@@ -1,5 +1,4 @@
 import urllib, urllib.request as urllib2, json, re, datetime, sys, http.cookiejar as cookielib
-
 import requests
 from lxml import html
 from termcolor import colored
@@ -14,44 +13,44 @@ class TweetManager:
         pass
 
     @staticmethod
-    def getTweets(tweetCriteria, receiveBuffer=None, location_search=False, bufferLength=100, proxy=None):
-        refreshCursor = ''
+    def get_tweets(tweet_criteria, receive_buffer=None, location_search=False, buffer_length=100, proxy=None):
+        refresh_cursor = ''
         results = []
-        resultsAux = []
-        cookieJar = cookielib.CookieJar()
+        results_aux = []
+        cookiejar = cookielib.CookieJar()
 
-        if hasattr(tweetCriteria, 'username') and (
-                tweetCriteria.username.startswith("\'") or tweetCriteria.username.startswith("\"")) and (
-                tweetCriteria.username.endswith("\'") or tweetCriteria.username.endswith("\"")):
-            tweetCriteria.username = tweetCriteria.username[1:-1]
+        if hasattr(tweet_criteria, 'username') and (
+                tweet_criteria.username.startswith("\'") or tweet_criteria.username.startswith("\"")) and (
+                tweet_criteria.username.endswith("\'") or tweet_criteria.username.endswith("\"")):
+            tweet_criteria.username = tweet_criteria.username[1:-1]
 
         active = True
 
         while active:
             try:
-                json = TweetManager.getJsonReponse(tweetCriteria, refreshCursor, cookieJar, proxy)
+                json = TweetManager.get_json_response(tweet_criteria, refresh_cursor, cookiejar, proxy)
                 if len(json['items_html'].strip()) == 0:
                     break
 
-                refreshCursor = json['min_position']
-                scrapedTweets = PyQuery(json['items_html'])
+                refresh_cursor = json['min_position']
+                scraped_tweets = PyQuery(json['items_html'])
                 # Remove incomplete tweets withheld by Twitter Guidelines
-                scrapedTweets.remove('div.withheld-tweet')
-                tweets = scrapedTweets('div.js-stream-tweet')
+                scraped_tweets.remove('div.withheld-tweet')
+                tweets = scraped_tweets('div.js-stream-tweet')
 
                 if len(tweets) == 0:
                     break
 
-                for tweetHTML in tweets:
-                    tweetPQ = PyQuery(tweetHTML)
+                for tweet_html in tweets:
+                    tweetPQ = PyQuery(tweet_html)
                     tweet = models.Tweet()
 
-                    usernameTweet = tweetPQ("span:first.username.u-dir b").text()
+                    username_tweet = tweetPQ("span:first.username.u-dir b").text()
                     txt = re.sub(r"\s+", " ", tweetPQ("p.js-tweet-text").text())
                     txt = txt.replace('# ', '#')
                     txt = txt.replace('@ ', '@')
 
-                    print(colored("@" + usernameTweet, "red") + colored(": ", "red") + txt + "\n")
+                    print(colored("@" + username_tweet, "red") + colored(": ", "red") + txt + "\n")
 
                     retweets = int(tweetPQ("span.ProfileTweet-action--retweet span.ProfileTweet-actionCount").attr(
                         "data-tweet-stat-count").replace(",", ""))
@@ -74,7 +73,7 @@ class TweetManager:
 
                         # user-information
                         ''' If this code block is uncommented, application will be slower due to response time'''
-                        '''result = requests.get("https://twitter.com/" + usernameTweet)
+                        '''result = requests.get("https://twitter.com/" + username_tweet)
                         c = result.content
 
                         soup = BeautifulSoup(c, "html.parser")
@@ -88,7 +87,7 @@ class TweetManager:
 
                     tweet.id = id
                     tweet.permalink = 'https://twitter.com' + permalink
-                    tweet.username = usernameTweet
+                    tweet.username = username_tweet
                     tweet.text = txt
                     tweet.date = datetime.datetime.fromtimestamp(dateSec)
                     tweet.retweets = retweets
@@ -98,49 +97,49 @@ class TweetManager:
                     tweet.user_id = user_id
 
                     results.append(tweet)
-                    resultsAux.append(tweet)
+                    results_aux.append(tweet)
 
-                    if receiveBuffer and len(resultsAux) >= bufferLength:
-                        receiveBuffer(resultsAux)
-                        resultsAux = []
+                    if receive_buffer and len(results_aux) >= buffer_length:
+                        receive_buffer(results_aux)
+                        results_aux = []
 
-                    if tweetCriteria.maxTweets > 0 and len(results) >= tweetCriteria.maxTweets:
+                    if tweet_criteria.maxTweets > 0 and len(results) >= tweet_criteria.maxTweets:
                         active = False
                         break
 
             except:
-                receiveBuffer(resultsAux)
+                receive_buffer(results_aux)
                 return
 
-        if receiveBuffer and len(resultsAux) > 0:
-            receiveBuffer(resultsAux)
+        if receive_buffer and len(results_aux) > 0:
+            receive_buffer(results_aux)
 
         return results
 
     @staticmethod
-    def getJsonReponse(tweetCriteria, refreshCursor, cookieJar, proxy):
+    def get_json_response(tweet_criteria, refresh_cursor, cookiejar, proxy):
         url = "https://twitter.com/i/search/timeline?f=tweets&q=%s&src=typd&max_position=%s"
 
-        urlGetData = ''
+        url_data = ''
 
-        if hasattr(tweetCriteria, 'username'):
-            urlGetData += ' from:' + tweetCriteria.username
+        if hasattr(tweet_criteria, 'username'):
+            url_data += ' from:' + tweet_criteria.username
 
-        if hasattr(tweetCriteria, 'querySearch'):
-            urlGetData += ' ' + tweetCriteria.querySearch
+        if hasattr(tweet_criteria, 'query'):
+            url_data += ' ' + tweet_criteria.query
 
-        if hasattr(tweetCriteria, 'since'):
-            urlGetData += ' since:' + tweetCriteria.since
+        if hasattr(tweet_criteria, 'since'):
+            url_data += ' since:' + tweet_criteria.since
 
-        if hasattr(tweetCriteria, 'until'):
-            urlGetData += ' until:' + tweetCriteria.until
+        if hasattr(tweet_criteria, 'until'):
+            url_data += ' until:' + tweet_criteria.until
 
-        if hasattr(tweetCriteria, 'topTweets'):
-            if tweetCriteria.topTweets:
+        if hasattr(tweet_criteria, 'topTweets'):
+            if tweet_criteria.topTweets:
                 url = "https://twitter.com/i/search/timeline?q=%s&src=typd&max_position=%s"
 
-        url = url % (urllib.parse.quote(urlGetData), refreshCursor)
-
+        url = url % (urllib.parse.quote(url_data), refresh_cursor)
+        print(url)
         headers = [
             ('Host', "twitter.com"),
             ('User-Agent',
@@ -154,21 +153,21 @@ class TweetManager:
 
         if proxy:
             opener = urllib2.build_opener(urllib2.ProxyHandler({'http': proxy, 'https': proxy}),
-                                          urllib2.HTTPCookieProcessor(cookieJar))
+                                          urllib2.HTTPCookieProcessor(cookiejar))
         else:
-            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookieJar))
+            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
         opener.addheaders = headers
 
         try:
             response = opener.open(url)
-            jsonResponse = response.read()
+            json_response = response.read()
         except:
             print
             "Twitter weird response. Try to see on browser: https://twitter.com/search?q=%s&src=typd" % urllib.parse.quote(
-                urlGetData)
+                url_data)
             sys.exit()
             return
 
-        dataJson = json.loads(jsonResponse)
+        data = json.loads(json_response)
 
-        return dataJson
+        return data

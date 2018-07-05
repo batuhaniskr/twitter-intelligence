@@ -3,7 +3,6 @@
 
 import sys, getopt, parser
 import sqlite3
-from geopy.geocoders import Nominatim
 from termcolor import colored
 
 conn = sqlite3.connect('TweetAnalysis.db')
@@ -50,33 +49,33 @@ def main(argv):
         opts, args = getopt.getopt(argv, "",
                                    ("username=", "since=", "until=", "query=", "toptweets=", "maxtweets=", "location="))
 
-        tweetCriteria = parser.manager.TweetCriteria()
+        tweet_criteria = parser.manager.TweetCriteria()
 
         for opt, arg in opts:
             if opt == '--username':
-                tweetCriteria.username = arg
+                tweet_criteria.username = arg
 
             elif opt == '--since':
-                tweetCriteria.since = arg
+                tweet_criteria.since = arg
 
             elif opt == '--until':
-                tweetCriteria.until = arg
+                tweet_criteria.until = arg
 
             elif opt == '--query':
-                tweetCriteria.querySearch = arg
+                tweet_criteria.query = arg
 
             elif opt == '--toptweets':
-                tweetCriteria.topTweets = True
+                tweet_criteria.topTweets = True
 
             elif opt == '--maxtweets':
-                tweetCriteria.maxTweets = int(arg)
+                tweet_criteria.maxTweets = int(arg)
             elif opt == '--location':
                 location_value = bool(arg)
                 print(location_value)
 
         print('\n' + colored('Searching...', 'green') + '\n')
 
-        def receiveBuffer(tweets):
+        def receive_buffer(tweets):
             locationid = 1;
             hashtagid = 1;
             for t in tweets:
@@ -85,8 +84,8 @@ def main(argv):
 
                 for hash in str:
                     hash_list.append(hash)
-                    paramsHashtag = (hashtagid, hash)
-                    paramsHashagTweet = (hashtagid, t.id)
+                    params_hashtag = (hashtagid, hash)
+                    params_hashag_tweet = (hashtagid, t.id)
                     if hash != "":
                         hashtagid = hashtagid + 1
                         c.execute("SELECT * FROM hashtag where content = '%s'" % hash)
@@ -94,10 +93,10 @@ def main(argv):
                         if exits is None:
                             c.execute("SELECT hashtag FROM tweet ")
 
-                            c.execute("INSERT OR IGNORE INTO HashtagTweet VALUES (?,?)", paramsHashagTweet)
-                            c.execute("INSERT OR IGNORE INTO Hashtag  VALUES (?,?)", paramsHashtag)
+                            c.execute("INSERT OR IGNORE INTO HashtagTweet VALUES (?,?)", params_hashag_tweet)
+                            c.execute("INSERT OR IGNORE INTO Hashtag  VALUES (?,?)", params_hashtag)
 
-                paramsTweet = (
+                params_tweet = (
                     t.id, t.text, t.username, t.hashtags, t.date.strftime('%Y-%m-%d'), t.date.strftime('%H:%M'),
                     t.retweets,
                     t.favorites, t.mentions, t.user_id, locationid)
@@ -105,27 +104,27 @@ def main(argv):
                 c.execute("SELECT * FROM Tweet where tweetid ='%s'" % t.id)
                 userexist = c.fetchone()
                 if userexist is None:
-                    c.execute("INSERT INTO Tweet VALUES (?,?,?,?,?,?,?,?,?,?,?)", paramsTweet)
+                    c.execute("INSERT INTO Tweet VALUES (?,?,?,?,?,?,?,?,?,?,?)", params_tweet)
 
-                paramsLocation = (locationid, t.geo)
+                params_location = (locationid, t.geo)
                 c.execute("SELECT * FROM location where place = '%s'" % t.geo)
                 locationexist = c.fetchone()
                 if locationexist is None and t.geo != '':
-                    c.execute("INSERT INTO Location VALUES(?,?)", paramsLocation)
+                    c.execute("INSERT INTO Location VALUES(?,?)", params_location)
                     locationid = locationid + 1
 
                 c.execute("SELECT * FROM location where place = '%s'" % t.geo)
                 locatuid = c.fetchone()
-                paramsUser = (t.user_id, t.username, locatuid)
+                params_user = (t.user_id, t.username, locatuid)
                 c.execute("SELECT * FROM user where username ='%s'" % t.username)
                 userexist = c.fetchone()
                 if userexist is None:
-                    c.execute("INSERT OR IGNORE INTO User VALUES(?,?,?)", paramsUser)
+                    c.execute("INSERT OR IGNORE INTO User VALUES(?,?,?)", params_user)
 
                 conn.commit()
-            print('More %d saved on file...\n' % len(tweets))
+            print('%d tweet received...\n' % len(tweets))
 
-        parser.manager.TweetManager.getTweets(tweetCriteria, receiveBuffer, location_search=location_value)
+        parser.manager.TweetManager.get_tweets(tweet_criteria, receive_buffer, location_search=location_value)
 
     except arg:
         print('You must pass some parameters. Use \"-h\" to help.' + arg)
