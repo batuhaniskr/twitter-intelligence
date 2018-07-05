@@ -1,10 +1,10 @@
-matplotlib==2.2.2
-termcolor==1.1.0
+numpy==1.14.1
+requests==2.18.4
 geopy==1.11.0
 pandas==0.22.0
+matplotlib==2.2.2
+lxml==4.2.1
 pyquery==1.4.0
-requests==2.18.4
-lxml==4.1.1
-numpy==1.14.1
+termcolor==1.1.0
+Flask==0.12.2
 PyQt4==4.11.4
-beautifulsoup4==4.6.0
