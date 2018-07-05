@@ -50,7 +50,7 @@ class TweetManager:
                     txt = txt.replace('# ', '#')
                     txt = txt.replace('@ ', '@')
 
-                    print(colored("@" + username_tweet, "red") + colored(": ", "red") + txt + "\n")
+                    print(colored("@" + username_tweet + ":", "red")  + colored(txt,"green") + "\n")
 
                     retweets = int(tweetPQ("span.ProfileTweet-action--retweet span.ProfileTweet-actionCount").attr(
                         "data-tweet-stat-count").replace(",", ""))

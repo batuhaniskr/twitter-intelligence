@@ -53,19 +53,14 @@ def main(argv):
         for opt, arg in opts:
             if opt == '--username':
                 tweet_criteria.username = arg
-
             elif opt == '--since':
                 tweet_criteria.since = arg
-
             elif opt == '--until':
                 tweet_criteria.until = arg
-
             elif opt == '--query':
                 tweet_criteria.query = arg
-
             elif opt == '--toptweets':
                 tweet_criteria.topTweets = True
-
             elif opt == '--maxtweets':
                 tweet_criteria.maxTweets = int(arg)
             elif opt == '--location':
@@ -121,7 +116,7 @@ def main(argv):
                     c.execute("INSERT OR IGNORE INTO User VALUES(?,?,?)", params_user)
 
                 conn.commit()
-            print('%d tweet received...\n' % len(tweets))
+            print(colored('\n %d tweet received...\n' % len(tweets), 'green'))
 
         parser.operation.TweetManager.get_tweets(tweet_criteria, receive_buffer, location_search=location_value)
 
@@ -129,7 +124,7 @@ def main(argv):
         print('You must pass some parameters. Use \"-h\" to help.' + arg)
 
     finally:
-        print('Succesfully saved to the database.')
+        print(colored('Succesfully saved to the database.', 'green'))
         conn.close()
 
 
