@@ -49,7 +49,8 @@ A project written in Python to twitter tracking and analysis without using Twitt
 <pre> python3 tracking.py --query "sakarya" --location "True"</pre>
 Application work view:
 
-![screenshot from 2017-06-11 22-23-16](https://user-images.githubusercontent.com/17202632/27014790-793342d0-4f08-11e7-951e-5bc374504a48.png)
+![screen shot 2018-07-06 at 12 06 47](https://user-images.githubusercontent.com/17202632/42370701-199425ec-8116-11e8-87d9-57bb94f9d717.png)
+
 </ul>
 
 ## Analysis
