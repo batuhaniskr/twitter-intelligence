@@ -46,6 +46,7 @@ def main(argv):
     except:
         print('You must pass some parameters. Use \"-h\" to help.')
 
+
 @app.route('/locations')
 def map():
     location = location_analysis()
@@ -87,19 +88,27 @@ def analysis_hashtag():
         c.execute("SELECT hashtag from Tweet")
         hashtag_list = []
         for row in c.fetchall():
-            if " " in ''.join(row):
-                for m in ''.join(row).split(' '):
-                    hashtag_list.append(m)
-            else:
-                signle_item = ''.join(row)
-                hashtag_list.append(signle_item)
+            if (row != ('',)):
+                if " " in ''.join(row):
+                    for m in ''.join(row).split(' '):
+                        hashtag_list.append(m)
+                else:
+                    signle_item = ''.join(row)
+                    hashtag_list.append(signle_item)
 
-        counter = Counter(hashtag_list)
+        counter = Counter(hashtag_list).most_common(10)
+        print(counter)
+        pl.rcdefaults()
+
+        keys = []
+        performance = []
+
+        for i in counter:
+            performance.append(i[1])
+            keys.append(i[0])
 
         pl.rcdefaults()
-        keys = counter.keys()
         y_pos = np.arange(len(keys))
-        performance = [counter[k] for k in keys]
         error = np.random.rand(len(keys))
 
         pl.barh(y_pos, performance, xerr=error, align='center', alpha=0.4, )
