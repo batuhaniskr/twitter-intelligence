@@ -25,9 +25,9 @@ def main(argv):
         return
 
     if len(argv) == 1 and argv[0] == '-h':
-        print_color_text()
+        __tool_logo()
         print("""
- \n""" + colored(" Examples:\n", "blue") + """
+ \n""" + colored(" Examples:\n", "green") + """
   """ + colored('# Get tweets by username\n', 'green') +
               """
        python3 tracking.py --username "HaberSau"\n
@@ -53,26 +53,22 @@ def main(argv):
         for opt, arg in opts:
             if opt == '--username':
                 tweet_criteria.username = arg
-
             elif opt == '--since':
                 tweet_criteria.since = arg
-
             elif opt == '--until':
                 tweet_criteria.until = arg
-
             elif opt == '--query':
                 tweet_criteria.query = arg
-
             elif opt == '--toptweets':
                 tweet_criteria.topTweets = True
-
             elif opt == '--maxtweets':
                 tweet_criteria.maxTweets = int(arg)
             elif opt == '--location':
                 location_value = bool(arg)
                 print(location_value)
 
-        print('\n' + colored('Searching...', 'green') + '\n')
+        __tool_logo()
+        print('\n' + colored('[+] Searching...', 'green') + '\n')
 
         def receive_buffer(tweets):
             locationid = 1;
@@ -121,7 +117,7 @@ def main(argv):
                     c.execute("INSERT OR IGNORE INTO User VALUES(?,?,?)", params_user)
 
                 conn.commit()
-            print('%d tweet received...\n' % len(tweets))
+            print(colored('\n[+] %d tweet received...\n' % len(tweets), 'green'))
 
         parser.operation.TweetManager.get_tweets(tweet_criteria, receive_buffer, location_search=location_value)
 
@@ -129,16 +125,31 @@ def main(argv):
         print('You must pass some parameters. Use \"-h\" to help.' + arg)
 
     finally:
-        print('Succesfully saved to the database.')
+        print(colored('[+] Succesfully saved to the database.', 'green'))
         conn.close()
 
 
-def print_color_text():
-    print(colored('''\n\t\t\033[1m
-        ▀▀█▀▀ █░░░█ ░▀░ ▀▀█▀▀ ▀▀█▀▀ █▀▀ █▀▀█   ░▀░ █▀▀▄ ▀▀█▀▀ █▀▀ █░░ █░░ ░▀░ █▀▀▀ █▀▀ █▀▀▄ █▀▀ █▀▀
-        ░░█░░ █▄█▄█ ▀█▀ ░░█░░ ░░█░░ █▀▀ █▄▄▀   ▀█▀ █░░█ ░░█░░ █▀▀ █░░ █░░ ▀█▀ █░▀█ █▀▀ █░░█ █░░ █▀▀
-        ░░▀░░ ░▀░▀░ ▀▀▀ ░░▀░░ ░░▀░░ ▀▀▀ ▀░▀▀   ▀▀▀ ▀░░▀ ░░▀░░ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀
-                       ''', 'blue'))
+def __tool_logo():
+    print(colored('''\n\t\t\033[1m        
+             ___________       .__.__  __                                          
+             \__    ___/_  _  _|__|__|/  |_  ___________                           
+               |    |  \ \/ \/ /  |  \   __\/ __ \_  __ \                          
+               |    |   \     /|  |  ||  | \  ___/|  | \/                          
+               |____|    \/\_/ |__|__||__|  \___  >__|                             
+            .___        __         .__  .__  .__\/                                 
+            |   | _____/  |_  ____ |  | |  | |__| ____   ____   ____   ____  ____  
+            |   |/    \   __\/ __ \|  | |  | |  |/ ___\_/ __ \ /    \_/ ___\/ __ \ 
+            |   |   |  \  | \  ___/|  |_|  |_|  / /_/  >  ___/|   |  \  \__\  ___/ 
+            |___|___|  /__|  \___  >____/____/__\___  / \___  >___|  /\___  >___  >
+                     \/          \/            /_____/      \/     \/     \/    \/ 
+       /.\                          
+       Y  \                  
+      /   "L                 
+     //  "/                  
+     |/ /\_==================
+     / /            
+    / /     
+    \/''', 'green'))
 
 
 if __name__ == '__main__':

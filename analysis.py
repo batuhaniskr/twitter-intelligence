@@ -9,6 +9,8 @@ import numpy as np
 import json
 from geopy.geocoders import Nominatim
 from flask import Flask, render_template
+from termcolor import colored
+
 import settings
 import sys, getopt
 
@@ -46,6 +48,7 @@ def main(argv):
     except:
         print('You must pass some parameters. Use \"-h\" to help.')
 
+
 @app.route('/locations')
 def map():
     location = location_analysis()
@@ -77,6 +80,7 @@ def analysis_user():
         pl.title('User - Tweet Count')
         pl.xlabel('Username')
         pl.ylabel('Tweet Count')
+        print(colored("[INFO] Showing graph of user analysis", "green"))
         pl.show()
 
 
@@ -87,25 +91,33 @@ def analysis_hashtag():
         c.execute("SELECT hashtag from Tweet")
         hashtag_list = []
         for row in c.fetchall():
-            if " " in ''.join(row):
-                for m in ''.join(row).split(' '):
-                    hashtag_list.append(m)
-            else:
-                signle_item = ''.join(row)
-                hashtag_list.append(signle_item)
+            if (row != ('',)):
+                if " " in ''.join(row):
+                    for m in ''.join(row).split(' '):
+                        hashtag_list.append(m)
+                else:
+                    signle_item = ''.join(row)
+                    hashtag_list.append(signle_item)
 
-        counter = Counter(hashtag_list)
+        counter = Counter(hashtag_list).most_common(10)
+        pl.rcdefaults()
+
+        keys = []
+        performance = []
+
+        for i in counter:
+            performance.append(i[1])
+            keys.append(i[0])
 
         pl.rcdefaults()
-        keys = counter.keys()
         y_pos = np.arange(len(keys))
-        performance = [counter[k] for k in keys]
         error = np.random.rand(len(keys))
 
         pl.barh(y_pos, performance, xerr=error, align='center', alpha=0.4, )
         pl.yticks(y_pos, keys)
         pl.xlabel('quantity')
         pl.title('hashtags')
+        print(colored("[INFO] Showing graph of hashtag analysis", "green"))
         pl.show()
 
 
@@ -140,7 +152,7 @@ def location_analysis():
                 locxy.clear()
 
         json_location = json.dumps(geo_data)
-
+        print(colored("[INFO] Showing graph of location analysis", "green"))
         return json_location
 
 
