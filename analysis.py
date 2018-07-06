@@ -9,6 +9,8 @@ import numpy as np
 import json
 from geopy.geocoders import Nominatim
 from flask import Flask, render_template
+from termcolor import colored
+
 import settings
 import sys, getopt
 
@@ -78,6 +80,7 @@ def analysis_user():
         pl.title('User - Tweet Count')
         pl.xlabel('Username')
         pl.ylabel('Tweet Count')
+        print(colored("[INFO] Showing graph of user analysis", "green"))
         pl.show()
 
 
@@ -97,7 +100,6 @@ def analysis_hashtag():
                     hashtag_list.append(signle_item)
 
         counter = Counter(hashtag_list).most_common(10)
-        print(counter)
         pl.rcdefaults()
 
         keys = []
@@ -115,6 +117,7 @@ def analysis_hashtag():
         pl.yticks(y_pos, keys)
         pl.xlabel('quantity')
         pl.title('hashtags')
+        print(colored("[INFO] Showing graph of hashtag analysis", "green"))
         pl.show()
 
 
@@ -149,7 +152,7 @@ def location_analysis():
                 locxy.clear()
 
         json_location = json.dumps(geo_data)
-
+        print(colored("[INFO] Showing graph of location analysis", "green"))
         return json_location
 
 
