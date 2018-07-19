@@ -24,6 +24,10 @@ A project written in Python to twitter tracking and analysis without using Twitt
 
 ## Usage Example
 
+<b>Application work view:</b>
+
+![screen shot 2018-07-06 at 12 18 51](https://user-images.githubusercontent.com/17202632/42370978-d4ea95a6-8116-11e8-97c9-bd8bf0ac7299.png)
+
 <ul>
   
 <li>Get help</li>
@@ -47,9 +51,6 @@ A project written in Python to twitter tracking and analysis without using Twitt
 <li> If you get location of tweets, add --location "True" param but application will be slower due to new response times.
 <br><br>
 <pre> python3 tracking.py --query "sakarya" --location "True"</pre>
-Application work view:
-
-![screen shot 2018-07-06 at 12 18 51](https://user-images.githubusercontent.com/17202632/42370978-d4ea95a6-8116-11e8-97c9-bd8bf0ac7299.png)
 
 </ul>
 
