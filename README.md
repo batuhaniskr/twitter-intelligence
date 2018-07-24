@@ -74,12 +74,16 @@ You must write Google Map Api Key in setting.py to display google map.
 
 <pre>GOOGLE_MAP_API_KEY='YOUR_GOOGLE_MAP_API_KEY'</pre>
 
-<li>Runs user analysis.</li>
-<br>
-<pre>python3 analysis.py --user</pre> 
 <li>Runs hashtag analysis.</li>
 <br>
 <pre>python3 analysis.py --hashtag</pre> 
+
+![hashtag](https://user-images.githubusercontent.com/17202632/43121336-135e21e6-8f26-11e8-93bd-16fe966f8aeb.png)
+
+<li>Runs user analysis.</li>
+<br>
+<pre>python3 analysis.py --user</pre> 
+
 
 ## Graphical User Interface
 
