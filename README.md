@@ -8,7 +8,7 @@ A project written in Python to twitter tracking and analysis without using Twitt
   
   <li>The package dependencies are in the file requirements.txt. Run that command to install the dependencies.</li>
   <br>
-  <pre>pip install -r requirements.txt</pre>
+  <pre>pip3 install -r requirements.txt</pre>
   
 </ul>
 
