@@ -2,7 +2,7 @@ import urllib, urllib.request as urllib2, json, re, datetime, sys, http.cookieja
 import requests
 from lxml import html
 from termcolor import colored
-
+import ssl
 from .. import model
 from pyquery import PyQuery
 
@@ -50,7 +50,7 @@ class TweetManager:
                     txt = txt.replace('# ', '#')
                     txt = txt.replace('@ ', '@')
 
-                    print(colored("@" + username_tweet + ": ", "red")  + colored(txt,"green") + "\n")
+                    print(colored("@" + username_tweet + ": ", "red") + colored(txt, "green") + "\n")
 
                     retweets = int(tweetPQ("span.ProfileTweet-action--retweet span.ProfileTweet-actionCount").attr(
                         "data-tweet-stat-count").replace(",", ""))
@@ -150,13 +150,20 @@ class TweetManager:
             ('Referer', url),
             ('Connection', "keep-alive")
         ]
+        if sys.version_info < (3, 6):
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
 
-        if proxy:
-            opener = urllib2.build_opener(urllib2.ProxyHandler({'http': proxy, 'https': proxy}),
-                                          urllib2.HTTPCookieProcessor(cookiejar))
+            opener = urllib2.build_opener(urllib2.HTTPSHandler(context=ctx))
+            urllib2.HTTPCookieProcessor(cookiejar)
         else:
-            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
-        opener.addheaders = headers
+            if proxy:
+                opener = urllib2.build_opener(urllib2.ProxyHandler({'http': proxy, 'https': proxy}),
+                                              urllib2.HTTPCookieProcessor(cookiejar))
+            else:
+                opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
+            opener.addheaders = headers
 
         try:
             response = opener.open(url)
