@@ -138,7 +138,7 @@ class TweetManager:
             if tweet_criteria.topTweets:
                 url = "https://twitter.com/i/search/timeline?q=%s&src=typd&max_position=%s"
 
-        url = url % (urllib.parse.quote(url_data), refresh_cursor)
+        url = url % (urllib.parse.quote(url_data), urllib.parse.quote(refresh_cursor))
 
         headers = [
             ('Host', "twitter.com"),
@@ -150,19 +150,12 @@ class TweetManager:
             ('Referer', url),
             ('Connection', "keep-alive")
         ]
-        if sys.version_info < (3, 6):
-            ctx = ssl.create_default_context()
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
 
-            opener = urllib2.build_opener(urllib2.HTTPSHandler(context=ctx))
-            urllib2.HTTPCookieProcessor(cookiejar)
+        if proxy:
+            opener = urllib2.build_opener(urllib2.ProxyHandler({'http': proxy, 'https': proxy}),
+                                          urllib2.HTTPCookieProcessor(cookiejar))
         else:
-            if proxy:
-                opener = urllib2.build_opener(urllib2.ProxyHandler({'http': proxy, 'https': proxy}),
-                                              urllib2.HTTPCookieProcessor(cookiejar))
-            else:
-                opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
+            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
             opener.addheaders = headers
 
         try:
