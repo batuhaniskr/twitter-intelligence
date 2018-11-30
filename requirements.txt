@@ -7,3 +7,4 @@ geopy>=1.11.0
 requests>=2.19.1
 numpy>=1.14.1
 matplotlib>=2.2.2
+#PyQt5==5.11.2
