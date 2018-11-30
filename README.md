@@ -92,7 +92,7 @@ You must write Google Map Api Key in setting.py to display google map.
 
 
 ## Graphical User Interface
- If you run gui application, you must change "#PyQt5==5.11.2" to "PyQt5==5.11.2" in requirements.txt and you can run the that command.
+ If you want run gui application, you should change "#PyQt5==5.11.2" to "PyQt5==5.11.2" in requirements.txt and you can run the that command.
  <pre>pip3 install -r requirements.txt</pre>
  
  socialgui.py used for gui application
