@@ -56,7 +56,9 @@ A project written in Python to twitter tracking and analysis without using Twitt
 
 <ul>
   <li>If you want you can run the application on the docker. </li>
+  <br>
   <pre>docker build . -t twitter-intelligence</pre>
+  <br>
   <pre>docker run -it -p 5000:5000 --rm -v "images:/usr/src/app/images" twitter-intelligence</pre>
  </ul>
 
