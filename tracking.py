@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys, getopt, parser
+import getopt
+import parser
 import sqlite3
+import sys
+
 from termcolor import colored
 
 conn = sqlite3.connect('TweetAnalysis.db')

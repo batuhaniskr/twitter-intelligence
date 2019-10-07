@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 
-import matplotlib.pyplot as pl
-from collections import Counter
-import sqlite3
-import os.path
-import numpy as np
+import getopt
 import json
-from geopy.geocoders import Nominatim
+import os.path
+import sqlite3
+import sys
+from collections import Counter
+
+import matplotlib.pyplot as pl
+import numpy as np
 from flask import Flask, render_template
+from geopy.geocoders import Nominatim
 from termcolor import colored
 
 import settings
-import sys, getopt
 
 ROOT_DIR = os.path.dirname(os.pardir)
 db_path = os.path.join(ROOT_DIR, "TweetAnalysis.db")

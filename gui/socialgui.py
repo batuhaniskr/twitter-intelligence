@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'gui.ui'
-#
-# Created by: PyQt4 UI code generator 4.11.4
-#
-# WARNING! All changes made in this file will be lost!
-import sys
-import getopt, parser, datetime, codecs, sqlite3
-import analysis
-import pandas as pd
-import pandas
-import matplotlib.pyplot as plt
 import sqlite3
-from PyQt5 import QtGui, QtWidgets
+import sys
+
+from PyQt5 import QtWidgets
+
+import analysis
+import parser
 
 conn = sqlite3.connect('../TweetAnalysis.db')
 conn.row_factory = lambda cursor, row: row[1]
@@ -262,7 +256,6 @@ class Ui_MainWindow(object):
 
 
 if __name__ == "__main__":
-
     app = QApplication(sys.argv)
     MainWindow = QMainWindow()
     ui = Ui_MainWindow()

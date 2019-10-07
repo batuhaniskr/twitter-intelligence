@@ -1,10 +1,17 @@
-import urllib, urllib.request as urllib2, json, re, datetime, sys, http.cookiejar as cookielib
+import datetime
+import http.cookiejar as cookielib
+import json
+import re
+import sys
+import urllib
+import urllib.request as urllib2
+
 import requests
 from lxml import html
-from termcolor import colored
-import ssl
-from .. import model
 from pyquery import PyQuery
+from termcolor import colored
+
+from .. import model
 
 
 class TweetManager:
