@@ -48,7 +48,7 @@ A project written in Python for twitter tracking and analysis without using Twit
 <br>
 <pre> python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10 </pre>
 
-<li> If you get location of tweets, add --location "True" param (but application will be slower due to new response times)
+<li> If you get location of tweets, add --location "True" param (but application will be slower due to new response times
 <br><br>
 <pre> python3 tracking.py --query "sakarya" --location "True"</pre>
 
