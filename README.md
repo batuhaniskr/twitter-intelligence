@@ -1,6 +1,6 @@
 # Twitter Intelligence
 
-A project written in Python to twitter tracking and analysis without using Twitter API.
+A project written in Python for twitter tracking and analysis without using Twitter API.
 
 ## Prerequisites
   <ul>
@@ -17,7 +17,7 @@ A project written in Python to twitter tracking and analysis without using Twitt
 <ul>
   <li>SQLite is used as the database.</li>
 
-  <li>Tweet data are stored on the Tweet, User, Location, Hashtag, HashtagTweet tables.</li>
+  <li>Tweet data is stored on the Tweet, User, Location, Hashtag, HashtagTweet tables.</li>
 
   <li>The database is created automically.</li>
 </ul>
@@ -48,14 +48,14 @@ A project written in Python to twitter tracking and analysis without using Twitt
 <br>
 <pre> python3 tracking.py --username "HaberSau" --since 2015-09-10 --until 2015-09-12 --maxtweets 10 </pre>
 
-<li> If you get location of tweets, add --location "True" param but application will be slower due to new response times.
+<li> If you get location of tweets, add --location "True" param (but application will be slower due to new response times
 <br><br>
 <pre> python3 tracking.py --query "sakarya" --location "True"</pre>
 
 </ul>
 
 <ul>
-  <li>If you want you can run the application on the docker. </li>
+  <li>If you want you can run the application in docker </li>
   <br>
   <pre>docker build . -t twitter-intelligence</pre>
   <br>
@@ -64,7 +64,7 @@ A project written in Python to twitter tracking and analysis without using Twitt
 
 ## Analysis
 
- analysis.py performs analysis processing. User, hashtag and location analyzes are performed.
+ analysis.py performs analysis processing. User, hashtag, and location analyzes are performed.
 
 <li>Get help:</li>
 <br>
